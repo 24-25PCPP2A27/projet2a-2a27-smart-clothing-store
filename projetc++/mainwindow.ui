@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>801</width>
+      <height>561</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>ajout livraison</string>
+     </attribute>
+     <widget class="QWidget" name="formLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>40</y>
+        <width>441</width>
+        <height>451</height>
+       </rect>
+      </property>
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="lineEdit_ID_2">
+         <property name="text">
+          <string>idL</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lineEdit_ID"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lineEdit_NumTransporteur">
+         <property name="text">
+          <string>numTransporteur</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineEdit_NumTransporteur_2"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="lineEdit_NomTransporteur">
+         <property name="text">
+          <string>nomTransporteur</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="lineEdit_NomTransporteur_2"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="lineEdit_AdresseLiv">
+         <property name="text">
+          <string>adresseLiv</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="lineEdit_AdresseLiv_2"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="lineEdit_StatutLiv">
+         <property name="text">
+          <string>statutLiv</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLineEdit" name="lineEdit_StatutLiv_2"/>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="lineEdit_FraisLiv">
+         <property name="text">
+          <string>fraisLiv</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QLineEdit" name="lineEdit_FraisLiv_2"/>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="dateEdit_DateLiv2">
+         <property name="text">
+          <string>dateLiv</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="QPushButton" name="pushButton_ajouter">
+         <property name="text">
+          <string>ajouter</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QDateEdit" name="dateEdit_DateLiv"/>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_2">
+     <attribute name="title">
+      <string>consulter livraison</string>
+     </attribute>
+     <widget class="QTableWidget" name="tableWidget">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>501</width>
+        <height>471</height>
+       </rect>
+      </property>
+      <column>
+       <property name="text">
+        <string>idL</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>numTrasnporteur</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>statutLiv</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>fraisLiv</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>dateLiv</string>
+       </property>
+      </column>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>eliminer livraison</string>
+     </attribute>
+     <widget class="QLineEdit" name="lineEdit">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>90</y>
+        <width>251</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>90</y>
+        <width>56</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>idL</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_supprimer">
+      <property name="geometry">
+       <rect>
+        <x>250</x>
+        <y>120</y>
+        <width>93</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>supprimer</string>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
