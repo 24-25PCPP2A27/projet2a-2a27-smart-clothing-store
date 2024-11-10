@@ -4,6 +4,7 @@
 #include <QSqlQueryModel>
 #include <QSqlError>
 #include <QDebug>
+#include "emailer.h"  // Include the emailer header
 
 Fournisseurs::Fournisseurs()
 {
@@ -39,6 +40,10 @@ bool Fournisseurs::ajouter()
         qDebug() << "Add Error: " << query.lastError().text();
         return false;
     }
+
+    // Check if the total seniority exceeds a threshold and send an email
+    checkAndSendEmailIfThresholdExceeded();
+
     return true;
 }
 
@@ -60,6 +65,10 @@ bool Fournisseurs::modifier()
         qDebug() << "Update Error: " << query.lastError().text();
         return false;
     }
+
+    // Check if the total seniority exceeds a threshold and send an email
+    checkAndSendEmailIfThresholdExceeded();
+
     return true;
 }
 
@@ -108,3 +117,36 @@ int Fournisseurs::calculerANCIENNETETotale()
     return ANCIENNETETotale;
 }
 
+void Fournisseurs::checkAndSendEmailIfThresholdExceeded()
+{
+    // Check if the quantity of any article in the ARTICLES table is 0
+    QSqlQuery query;
+    query.prepare("SELECT * FROM ARTICLES WHERE QUANTITE = 0");
+    if (query.exec()) {
+        if (query.next()) {
+            // If quantity reaches zero, send an email notification
+            sendEmailNotification("One of the articles has reached zero quantity.");
+        }
+    } else {
+        qDebug() << "Error checking article quantity: " << query.lastError().text();
+    }
+}
+
+void Fournisseurs::sendEmailNotification(const QString &message)
+{
+    // Email account credentials (replace with actual values)
+    QString email = "jemai.ilef@esprit.tn";   // Sender's email address
+    QString password = "Blanca1Rico23";        // Sender's email password (use environment variable for better security)
+    QString host = "smtp.outlook.com";          // SMTP server (use Gmail's SMTP server if using Gmail)
+    int port = 587;                            // Port (587 for TLS)
+    int timeout = 10000;                       // Timeout in milliseconds
+
+    // Create emailer instance and send email
+    emailer *emailerObj = new emailer(email, password, host, port, timeout);
+
+    // Send email notification using emailerObj
+    emailerObj->sendEmailNotification(message);
+
+    // Clean up after sending the email
+    delete emailerObj;
+}

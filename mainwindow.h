@@ -2,18 +2,20 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QSqlQueryModel>
 #include "fournisseurs.h"
+#include "emailer.h"
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
+namespace Ui {
+class MainWindow;
+}
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
 private slots:
@@ -21,10 +23,11 @@ private slots:
     void on_modifyButton_clicked();
     void on_displayButton_clicked();
     void on_deleteButton_clicked();
+    void handleEmailStatus(const QString &status);  // Slot to handle email status
 
 private:
     Ui::MainWindow *ui;
-    Fournisseurs fournisseur;
+    Fournisseurs fournisseur;  // Instance of the Fournisseurs class
 };
 
 #endif // MAINWINDOW_H

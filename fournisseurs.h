@@ -2,20 +2,21 @@
 #define FOURNISSEURS_H
 
 #include <QString>
-#include <QSqlQuery>
 #include <QSqlQueryModel>
 
-class Fournisseurs
-{
+class Fournisseurs {
 public:
+    // Constructors
     Fournisseurs();
     Fournisseurs(int IDF, QString NOM, QString PRENOM, QString ADRESSE, QString NUM_TEL, QString CATEGORIE_PROD, int ANCIENNETE);
 
+    // Methods
     bool ajouter();
     bool modifier();
-    QSqlQueryModel* afficher();
-    bool supprimer(int idf);
-    int calculerANCIENNETETotale();
+    bool supprimer(int IDF);
+    QSqlQueryModel *afficher();
+    void sendEmailNotification(const QString &message);
+    void checkAndSendEmailIfThresholdExceeded();
 
 private:
     int IDF;
@@ -25,6 +26,9 @@ private:
     QString NUM_TEL;
     QString CATEGORIE_PROD;
     int ANCIENNETE;
+
+    // Helper methods
+    int calculerANCIENNETETotale();
 };
 
 #endif // FOURNISSEURS_H
