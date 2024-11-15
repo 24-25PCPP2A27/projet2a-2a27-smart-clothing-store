@@ -18,13 +18,13 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>10</y>
+      <y>20</y>
       <width>801</width>
       <height>561</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -33,79 +33,82 @@
      <widget class="QWidget" name="formLayoutWidget">
       <property name="geometry">
        <rect>
-        <x>40</x>
-        <y>40</y>
-        <width>441</width>
-        <height>451</height>
+        <x>60</x>
+        <y>60</y>
+        <width>281</width>
+        <height>311</height>
        </rect>
       </property>
       <layout class="QFormLayout" name="formLayout">
        <item row="0" column="0">
-        <widget class="QLabel" name="lineEdit_ID_2">
+        <widget class="QLabel" name="idLabel">
          <property name="text">
-          <string>idL</string>
+          <string>id</string>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QLineEdit" name="lineEdit_ID"/>
+        <widget class="QLineEdit" name="lineEdit_IDL"/>
        </item>
        <item row="1" column="0">
-        <widget class="QLabel" name="lineEdit_NumTransporteur">
+        <widget class="QLabel" name="numtransporteurLabel">
          <property name="text">
-          <string>numTransporteur</string>
+          <string>numtransporteur</string>
          </property>
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QLineEdit" name="lineEdit_NumTransporteur_2"/>
+        <widget class="QLineEdit" name="lineEdit_NUM_TRANSPORTEUR"/>
        </item>
        <item row="2" column="0">
-        <widget class="QLabel" name="lineEdit_NomTransporteur">
+        <widget class="QLabel" name="nomtransporteurLabel">
          <property name="text">
-          <string>nomTransporteur</string>
+          <string>nomtransporteur</string>
          </property>
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QLineEdit" name="lineEdit_NomTransporteur_2"/>
+        <widget class="QLineEdit" name="lineEdit_NOM_TRANSPORTEUR"/>
        </item>
        <item row="3" column="0">
-        <widget class="QLabel" name="lineEdit_AdresseLiv">
+        <widget class="QLabel" name="adressLivraisonLabel">
          <property name="text">
-          <string>adresseLiv</string>
+          <string>adress livraison</string>
          </property>
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QLineEdit" name="lineEdit_AdresseLiv_2"/>
+        <widget class="QLineEdit" name="lineEdit_ADRESSE_LIV"/>
        </item>
        <item row="4" column="0">
-        <widget class="QLabel" name="lineEdit_StatutLiv">
+        <widget class="QLabel" name="statusLivraisonLabel">
          <property name="text">
-          <string>statutLiv</string>
+          <string>status livraison</string>
          </property>
         </widget>
        </item>
        <item row="4" column="1">
-        <widget class="QLineEdit" name="lineEdit_StatutLiv_2"/>
+        <widget class="QLineEdit" name="lineEdit_STATUE_LIV"/>
        </item>
        <item row="5" column="0">
-        <widget class="QLabel" name="lineEdit_FraisLiv">
+        <widget class="QLabel" name="fraisLivraisonLabel">
          <property name="text">
-          <string>fraisLiv</string>
+          <string>frais livraison</string>
          </property>
         </widget>
        </item>
        <item row="5" column="1">
-        <widget class="QLineEdit" name="lineEdit_FraisLiv_2"/>
+        <widget class="QLineEdit" name="lineEdit_FRAIS_LIV"/>
        </item>
        <item row="6" column="0">
-        <widget class="QLabel" name="dateEdit_DateLiv2">
+        <widget class="QLabel" name="dateLabel">
          <property name="text">
-          <string>dateLiv</string>
+          <string>date</string>
          </property>
         </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QDateEdit" name="dateEdit_DATE_LIV"/>
        </item>
        <item row="7" column="1">
         <widget class="QPushButton" name="pushButton_ajouter">
@@ -113,9 +116,6 @@
           <string>ajouter</string>
          </property>
         </widget>
-       </item>
-       <item row="6" column="1">
-        <widget class="QDateEdit" name="dateEdit_DateLiv"/>
        </item>
       </layout>
      </widget>
@@ -158,6 +158,94 @@
         <string>dateLiv</string>
        </property>
       </column>
+     </widget>
+     <widget class="QPushButton" name="pushButton_afficher">
+      <property name="geometry">
+       <rect>
+        <x>600</x>
+        <y>390</y>
+        <width>93</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Refresh</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_recherche">
+      <property name="geometry">
+       <rect>
+        <x>590</x>
+        <y>90</y>
+        <width>113</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>560</x>
+        <y>90</y>
+        <width>56</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>IDL</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_recherche">
+      <property name="geometry">
+       <rect>
+        <x>590</x>
+        <y>130</y>
+        <width>93</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Chercher</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_sort">
+      <property name="geometry">
+       <rect>
+        <x>600</x>
+        <y>360</y>
+        <width>93</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Tri</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_exportPDF">
+      <property name="geometry">
+       <rect>
+        <x>600</x>
+        <y>420</y>
+        <width>93</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>ExportPDF</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_showStats">
+      <property name="geometry">
+       <rect>
+        <x>600</x>
+        <y>450</y>
+        <width>93</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Stats</string>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_3">

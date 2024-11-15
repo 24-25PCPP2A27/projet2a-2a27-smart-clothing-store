@@ -18,8 +18,13 @@ private slots: // Ensure that these methods are declared as slots
     void on_pushButton_ajouter_clicked();
     void on_pushButton_afficher_clicked();
     void on_pushButton_supprimer_clicked();
+    void on_pushButton_recherche_clicked();
+    void on_pushButton_sort_clicked();
+    void on_pushButton_exportPDF_clicked();
+    void on_pushButton_showStats_clicked();
 
 private:
     Ui::MainWindow *ui;
+    void displayLivraisons();
 };
 #endif // MAINWINDOW_H

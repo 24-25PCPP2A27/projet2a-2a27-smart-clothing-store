@@ -1,141 +1,180 @@
 #include "livraisons.h"
+#include <QtDebug>
+#include <QSqlError>
+
+
 
 // Default constructor
-livraison::livraison()
-{
-    idl = 0;
-    num_Transporteur = "";
-    nom_Transporteur = "";
-    adresse_Liv = "";
-    statue_Liv = "";
-    frais_Liv = 0.0f;
-    date_Liv = QDate();
-}
+livraisons::livraisons() {}
 
-// Parametrized constructor
-livraison::livraison(int idl, QString num_Transporteur, QString nom_Transporteur, QString adresse_Liv,
-                     QString statue_Liv, float frais_Liv, QDate date_Liv)
-{
-    this->idl = idl;
-    this->num_Transporteur = num_Transporteur;
-    this->nom_Transporteur = nom_Transporteur;
-    this->adresse_Liv = adresse_Liv;
-    this->statue_Liv = statue_Liv;
-    this->frais_Liv = frais_Liv;
-    this->date_Liv = date_Liv;
+// Parameterized constructor
+livraisons::livraisons(int IDL, QString NUM_TRANSPORTEUR, QString NOM_TRANSPORTEUR, QString ADRESSE_LIV,
+                     QString STATUE_LIV, int FRAIS_LIV, QDate DATE_LIV) {
+    this->IDL = IDL;
+    this->NUM_TRANSPORTEUR = NUM_TRANSPORTEUR;
+    this->NOM_TRANSPORTEUR = NOM_TRANSPORTEUR;
+    this->ADRESSE_LIV = ADRESSE_LIV;
+    this->STATUE_LIV = STATUE_LIV;
+    this->FRAIS_LIV = FRAIS_LIV;
+    this->DATE_LIV = DATE_LIV;
 }
 
 // Validation method
-bool livraison::valider() {
-    // Vérifier que les champs requis ne sont pas vides et que les frais sont valides
-    if (num_Transporteur.isEmpty() || nom_Transporteur.isEmpty() || adresse_Liv.isEmpty() ||
-        statue_Liv.isEmpty() || frais_Liv < 0 || !date_Liv.isValid()) {
-        return false; // Validation échouée
+bool livraisons::valider() {
+    if (NUM_TRANSPORTEUR.isEmpty() || NOM_TRANSPORTEUR.isEmpty() || ADRESSE_LIV.isEmpty() ||
+        STATUE_LIV.isEmpty() || FRAIS_LIV < 0 || !DATE_LIV.isValid()) {
+        qDebug() << "Validation failed: Invalid data.";
+        return false;
     }
-    return true; // Validation réussie
+    return true;
 }
 
 // Ajouter method
-bool livraison::ajouter()
-{
+bool livraisons::ajouter() {
     QSqlQuery query;
-    query.prepare("INSERT INTO LIVRAISONS (IDL, Num_transporteur, Nom_transporteur, Adresse_liv, Statue_liv, Frais_liv, Date_liv) "
-                  "VALUES (:idl, :num_transporteur, :nom_transporteur, :adresse_liv, :statue_liv, CAST(:frais_liv AS NUMBER), :date_liv)");
+    query.prepare("INSERT INTO LIVRAISONS (IDL, NUM_TRANSPORTEUR, NOM_TRANSPORTEUR, ADRESSE_LIV, STATUE_LIV, FRAIS_LIV, DATE_LIV) "
+                  "VALUES (:IDL, :NUM_TRANSPORTEUR, :NOM_TRANSPORTEUR, :ADRESSE_LIV, :STATUE_LIV, :FRAIS_LIV, :DATE_LIV)");
+    query.bindValue(":IDL", IDL);
+    query.bindValue(":NUM_TRANSPORTEUR", NUM_TRANSPORTEUR);
+    query.bindValue(":NOM_TRANSPORTEUR", NOM_TRANSPORTEUR);
+    query.bindValue(":ADRESSE_LIV", ADRESSE_LIV);
+    query.bindValue(":STATUE_LIV", STATUE_LIV);
+    query.bindValue(":FRAIS_LIV", FRAIS_LIV);
+    query.bindValue(":DATE_LIV", DATE_LIV);
 
-    query.bindValue(":idl", idl);
-    query.bindValue(":num_transporteur", num_Transporteur);
-    query.bindValue(":nom_transporteur", nom_Transporteur);
-    query.bindValue(":adresse_liv", adresse_Liv);
-    query.bindValue(":statue_liv", statue_Liv);
-    query.bindValue(":frais_liv", frais_Liv); // Double type should bind directly
-    query.bindValue(":date_liv", date_Liv); // QDate binds directly if DB expects a DATE type
-
-    if (query.exec())
-    {
+    if (query.exec()) {
         return true;
+    } else {
+        qDebug() << "Add failed:" << query.lastError().text();
+        return false;
     }
-    else
-    {
-        qDebug() << "Failed to execute query:" << query.lastError().text();
+
+}
+
+// Afficher method
+QSqlQueryModel* livraisons::display() {
+    QSqlQueryModel *model = new QSqlQueryModel();
+
+    QSqlQuery query;
+    query.prepare("SELECT * FROM LIVRAISONS");  // Adjust query if needed
+
+    if (query.exec()) {
+        model->setQuery(query);  // Apply the query to load fresh data
+    } else {
+        qDebug() << "Select error:" << query.lastError().text();
+    }
+
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("IDL"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("NUM_TRANSPORTEUR"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("NOM_TRANSPORTEUR"));
+    model->setHeaderData(3, Qt::Horizontal, QObject::tr("ADRESSE_LIV"));
+    model->setHeaderData(4, Qt::Horizontal, QObject::tr("STATUE_LIV"));
+    model->setHeaderData(5, Qt::Horizontal, QObject::tr("FRAIS_LIV"));
+    model->setHeaderData(6, Qt::Horizontal, QObject::tr("DATE_LIV"));
+
+    return model;
+}
+
+
+
+// Supprimer method
+bool livraisons::supprimer(int IDL) {
+    QSqlQuery query;
+    query.prepare("DELETE FROM LIVRAISONS WHERE IDL = :IDL");  // Delete using the specific IDL
+    query.bindValue(":IDL", IDL);
+
+    qDebug() << "Attempting to delete IDL:" << IDL;  // Debug the IDL passed to the query
+
+    if (query.exec()) {
+        if (query.numRowsAffected() > 0) {
+            qDebug() << "Record with IDL =" << IDL << "deleted successfully.";
+            return true;
+        } else {
+            qDebug() << "No record found with IDL =" << IDL;
+            return false;
+        }
+    } else {
+        qDebug() << "Delete failed:" << query.lastError().text();
         return false;
     }
 }
 
-// Afficher method
-QSqlQueryModel* livraison::afficher()
-{
-    QSqlQueryModel *model = new QSqlQueryModel();
-    model->setQuery("SELECT * FROM LIVRAISONS");
 
-    if (model->lastError().isValid())
-    {
-        qDebug() << "Error in SELECT query:" << model->lastError().text();
-    }
 
-    model->setHeaderData(0, Qt::Horizontal, QObject::tr("IDL"));
-    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Num_transporteur"));
-    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Nom_transporteur"));
-    model->setHeaderData(3, Qt::Horizontal, QObject::tr("Adresse_liv"));
-    model->setHeaderData(4, Qt::Horizontal, QObject::tr("Statue_liv"));
-    model->setHeaderData(5, Qt::Horizontal, QObject::tr("Frais_liv"));
-    model->setHeaderData(6, Qt::Horizontal, QObject::tr("Date_liv"));
-
-    return model;
-}
-
-// Supprimer method
-bool livraison::supprimer(int id)
-{
-    QSqlQuery query;
-    query.prepare("DELETE FROM LIVRAISONS WHERE IDL = :idl");
-    query.bindValue(":idl", id);
-
-    return query.exec(); // Returns true if the query executes successfully
-}
 
 // Modifier method
-bool livraison::modifier(int id)
-{
+bool livraisons::modifier(int IDL) {
     if (!valider()) {
-        qDebug() << "Erreur de validation des données : les données saisies sont invalides.";
-        return false; // Validation échouée
+        qDebug() << "Validation failed: Cannot modify.";
+        return false;
     }
 
     QSqlQuery query;
-    query.prepare("UPDATE LIVRAISONS SET NUM_TRANSPORTEUR = :num_Transporteur, NOM_TRANSPORTEUR = :nom_Transporteur, "
-                  "ADRESSE_LIV = :adresse_Liv, STATUE_LIV = :statut_Liv, FRAIS_LIV = :frais_Liv, DATE_LIV = :date_Liv "
-                  "WHERE IDL = :idl");
-    query.bindValue(":idl", id);
-    query.bindValue(":num_Transporteur", num_Transporteur);
-    query.bindValue(":nom_Transporteur", nom_Transporteur);
-    query.bindValue(":adresse_Liv", adresse_Liv);
-    query.bindValue(":statut_Liv", statue_Liv);
-    query.bindValue(":frais_Liv", frais_Liv);
-    query.bindValue(":date_Liv", date_Liv);
+    query.prepare("UPDATE LIVRAISONS SET NUM_TRANSPORTEUR = :NUM_TRANSPORTEUR, NOM_TRANSPORTEUR = :NOM_TRANSPORTEUR, "
+                  "ADRESSE_LIV = :ADRESSE_LIV, STATUE_LIV = :STATUE_LIV, FRAIS_LIV = :FRAIS_LIV, DATE_LIV = :DATE_LIV "
+                  "WHERE IDL = :IDL");
+    query.bindValue(":IDL", IDL);
+    query.bindValue(":NUM_TRANSPORTEUR", NUM_TRANSPORTEUR);
+    query.bindValue(":NOM_TRANSPORTEUR", NOM_TRANSPORTEUR);
+    query.bindValue(":ADRESSE_LIV", ADRESSE_LIV);
+    query.bindValue(":STATUE_LIV", STATUE_LIV);
+    query.bindValue(":FRAIS_LIV", FRAIS_LIV);
+    query.bindValue(":DATE_LIV", DATE_LIV);
 
-    return query.exec();
+    if (query.exec()) {
+        return true;
+    } else {
+        qDebug() << "Update failed:" << query.lastError().text();
+        return false;
+    }
 }
 
 // Rechercher method
-QSqlQueryModel* livraison::rechercher(QString nom_Transporteur)
-{
+QSqlQueryModel* livraisons::rechercher(int IDL) {
     QSqlQueryModel *model = new QSqlQueryModel();
     QSqlQuery query;
 
-    // Préparer une requête pour rechercher par nom du transporteur
-    query.prepare("SELECT * FROM LIVRAISONS WHERE NOM_TRANSPORTEUR LIKE :nom_Transporteur");
-    query.bindValue(":nom_Transporteur", "%" + nom_Transporteur + "%");
-    query.exec();
+    query.prepare("SELECT * FROM LIVRAISONS WHERE IDL = :IDL");
+    query.bindValue(":IDL", IDL);
 
-    model->setQuery(query);
+    if (!query.exec()) {
+        qDebug() << "Search failed:" << query.lastError().text();
+    } else {
+        model->setQuery(query);
+    }
+
     return model;
 }
 
 // Tri method
-QSqlQueryModel* livraison::tri()
-{
+QSqlQueryModel* livraisons::tri() {
     QSqlQueryModel *model = new QSqlQueryModel();
     model->setQuery("SELECT * FROM LIVRAISONS ORDER BY DATE_LIV DESC");
 
+    if (model->lastError().isValid()) {
+        qDebug() << "Sort failed:" << model->lastError().text();
+    }
+
     return model;
+}
+
+//stats:
+QMap<QString, int> livraisons::getAdresseStats() {
+    QMap<QString, int> stats;
+    QSqlQuery query;
+
+    // Query to get count of deliveries grouped by ADRESSE_LIV
+    query.prepare("SELECT ADRESSE_LIV, COUNT(*) as count FROM LIVRAISONS GROUP BY ADRESSE_LIV");
+
+    if (!query.exec()) {
+        qDebug() << "Error retrieving address statistics:" << query.lastError().text();
+    } else {
+        while (query.next()) {
+            QString adresse = query.value("ADRESSE_LIV").toString();
+            int count = query.value("count").toInt();
+            stats[adresse] = count;  // Store the address and count in the map
+        }
+    }
+
+    return stats;
 }
