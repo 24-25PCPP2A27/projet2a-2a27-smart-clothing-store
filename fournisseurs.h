@@ -4,31 +4,32 @@
 #include <QString>
 #include <QSqlQueryModel>
 
-class Fournisseurs {
+class Fournisseurs
+{
 public:
-    // Constructors
-    Fournisseurs();
-    Fournisseurs(int IDF, QString NOM, QString PRENOM, QString ADRESSE, QString NUM_TEL, QString CATEGORIE_PROD, int ANCIENNETE);
+    Fournisseurs();  // Default constructor
+    Fournisseurs(int IDF, QString NOM, QString PRENOM, QString ADRESSE, QString NUM_TEL, QString CATEGORIE_PROD, int ANCIENNETE);  // Parameterized constructor
 
-    // Methods
-    bool ajouter();
-    bool modifier();
-    bool supprimer(int IDF);
-    QSqlQueryModel *afficher();
-    void sendEmailNotification(const QString &message);
-    void checkAndSendEmailIfThresholdExceeded();
+    bool ajouter();  // Method to add supplier
+    bool modifier();  // Method to modify supplier
+    bool supprimer(int IDF);  // Method to delete supplier
+    QSqlQueryModel* afficher();  // Method to display suppliers
+    QSqlQueryModel* search(const QString &searchQuery);
+    bool exportToPDF(const QString &filePath);
+    QSqlQueryModel* sortByAnciennete();
+
+
+
 
 private:
     int IDF;
-    QString NOM;
-    QString PRENOM;
-    QString ADRESSE;
-    QString NUM_TEL;
-    QString CATEGORIE_PROD;
+    QString NOM, PRENOM, ADRESSE, NUM_TEL, CATEGORIE_PROD;
     int ANCIENNETE;
 
-    // Helper methods
-    int calculerANCIENNETETotale();
+    void checkAndSendEmailIfThresholdExceeded();  // Method to check and send email
+    void sendEmailNotification(const QString &message);  // Method to send email notifications
+
 };
 
 #endif // FOURNISSEURS_H
+
