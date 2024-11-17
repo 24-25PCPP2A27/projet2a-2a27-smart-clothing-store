@@ -11,6 +11,8 @@
 #include <QPrinter>
 #include <QTableWidget>
 #include <QTableWidgetItem>
+#include "barchartwidget.h"
+
 
 
 // Constructor
@@ -246,35 +248,35 @@ void MainWindow::on_pushButton_exportPDF_clicked() {
 }
 
 //stats:
+
+
 void MainWindow::on_pushButton_showStats_clicked() {
     // Get address statistics from livraisons
     livraisons l;
     QMap<QString, int> stats = l.getAdresseStats();
 
-    // Create a QTableWidget to display the statistics as a separate, closable window
-    QTableWidget *tableWidget = new QTableWidget(stats.size(), 2);
-    tableWidget->setWindowTitle("Deliveries by Address (ADRESSE_LIV)");
-    tableWidget->setHorizontalHeaderLabels({"Address", "Delivery Count"});
+    // Create the BarChartWidget and pass the stats data
+    BarChartWidget *chartWidget = new BarChartWidget(stats, this);
 
-    // Populate the table with address statistics
-    int row = 0;
-    for (auto it = stats.begin(); it != stats.end(); ++it) {
-        QTableWidgetItem *addressItem = new QTableWidgetItem(it.key());
-        QTableWidgetItem *countItem = new QTableWidgetItem(QString::number(it.value()));
-
-        tableWidget->setItem(row, 0, addressItem);
-        tableWidget->setItem(row, 1, countItem);
-
-        ++row;
+    // Set the chartWidget as a child of the "frame_chart" in the "Statistics" tab
+    QLayout *layout = ui->frame_chart->layout();
+    if (!layout) {
+        layout = new QVBoxLayout(ui->frame_chart);
+        ui->frame_chart->setLayout(layout);
     }
 
-    // Set the position of the tableWidget on the screen
-    tableWidget->move(100, 100);  // Adjust x and y position as needed
+    // Clear any previous content
+    QLayoutItem *child;
+    while ((child = layout->takeAt(0)) != nullptr) {
+        delete child->widget();  // Remove the old chart widget
+        delete child;
+    }
 
-    // Adjust the table size and set window flags to make it a standalone window
-    tableWidget->resize(400, 300);
-    tableWidget->setWindowFlags(Qt::Window | Qt::WindowCloseButtonHint);
+    // Add the new chart widget
+    layout->addWidget(chartWidget);
+    chartWidget->show();
 
-    // Show the tableWidget as a standalone window
-    tableWidget->show();
+    // Switch to the "Statistics" tab
+    ui->tabwidget->setCurrentWidget(ui->tab_4);  // Ensure to name your tab appropriately
 }
+

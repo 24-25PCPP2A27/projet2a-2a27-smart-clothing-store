@@ -20,12 +20,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+    barchartwidget.cpp \
     livraisons.cpp \
         main.cpp \
         mainwindow.cpp \
     connection.cpp
 
 HEADERS += \
+    barchartwidget.h \
     livraisons.h \
         mainwindow.h \
     connection.h
