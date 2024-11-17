@@ -15,10 +15,12 @@
 
 
 
+
 // Constructor
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+
 {
     ui->setupUi(this);
     displayLivraisons(); // Display deliveries when the window is created
@@ -27,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+
 }
 
 void MainWindow::on_pushButton_ajouter_clicked()
@@ -279,4 +282,7 @@ void MainWindow::on_pushButton_showStats_clicked() {
     // Switch to the "Statistics" tab
     ui->tabwidget->setCurrentWidget(ui->tab_4);  // Ensure to name your tab appropriately
 }
+
+
+
 
