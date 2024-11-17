@@ -8,7 +8,7 @@ class Fournisseurs
 {
 public:
     Fournisseurs();  // Default constructor
-    Fournisseurs(int IDF, QString NOM, QString PRENOM, QString ADRESSE, QString NUM_TEL, QString CATEGORIE_PROD, int ANCIENNETE);  // Parameterized constructor
+    Fournisseurs(int IDF, QString NOM, QString PRENOM, QString ADRESSE, QString NUM_TEL, QString CATEGORIE_PROD, int ANCIENNETE, QString EMAIL);  // Parameterized constructor
 
     bool ajouter();  // Method to add supplier
     bool modifier();  // Method to modify supplier
@@ -23,7 +23,7 @@ public:
 
 private:
     int IDF;
-    QString NOM, PRENOM, ADRESSE, NUM_TEL, CATEGORIE_PROD;
+    QString NOM, PRENOM, ADRESSE, NUM_TEL, CATEGORIE_PROD,EMAIL;
     int ANCIENNETE;
 
     void checkAndSendEmailIfThresholdExceeded();  // Method to check and send email
@@ -32,4 +32,3 @@ private:
 };
 
 #endif // FOURNISSEURS_H
-

@@ -6,6 +6,8 @@
 #include "fournisseurs.h"
 #include "emailer.h"
 #include <QTableView>
+#include<qrcodedialog.h>
+
 namespace Ui {
 class MainWindow;
 }
@@ -24,13 +26,15 @@ private slots:
     void on_modifyButton_clicked();
     void on_displayButton_clicked();
     void on_supprimer_Button_2_clicked();
-    void handleEmailStatus(const QString &status);  // Slot to handle email status
-    void on_pushButton_clicked();
+    void handleEmailStatus(const QString &status);  // Slot to handle email statu
     void searchFournisseurs(const QString &query);
     void initializeCategoryComboBox();
     void onStatButtonClicked();
     void exportDataToPDF();
     void on_tri_clicked();
+    void on_QR_code_clicked();
+
+
 
 
 

@@ -29,6 +29,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->stat_Button, &QPushButton::clicked, this, &MainWindow::onStatButtonClicked);
     connect(ui->PDF, &QPushButton::clicked, this, &MainWindow::exportDataToPDF);
     connect(ui->tri, &QPushButton::clicked, this, &MainWindow::on_tri_clicked);
+    connect(ui->QR_code, &QPushButton::clicked, this, &MainWindow::on_QR_code_clicked);
+
+
+
+
+
 
     // Create an instance of emailer with login credentials
     emailer *mailer = new emailer("your_email@example.com", "your_password", "smtp.example.com", 465, 5000);
@@ -73,8 +79,9 @@ void MainWindow::on_addButton_clicked()
     QString NUM_TEL = ui->numTelInput->text();
     QString CATEGORIE_PROD = ui->comboBox_categorie->currentText();
     int ANCIENNETE = ui->ancienneteInput->text().toInt();
+    QString EMAIL = ui->ancienneteInput_2->text();  // Get email input from the UI
 
-    Fournisseurs fournisseur(IDF, NOM, PRENOM, ADRESSE, NUM_TEL, CATEGORIE_PROD, ANCIENNETE);
+    Fournisseurs fournisseur(IDF, NOM, PRENOM, ADRESSE, NUM_TEL, CATEGORIE_PROD, ANCIENNETE, EMAIL);
 
     if (fournisseur.ajouter()) {
         QMessageBox::information(this, "Success", "Supplier added successfully.");
@@ -95,8 +102,9 @@ void MainWindow::on_modifyButton_clicked()
     QString NUM_TEL = ui->numTelInput->text();
     QString CATEGORIE_PROD = ui->comboBox_categorie->currentText();
     int ANCIENNETE = ui->ancienneteInput->text().toInt();
+    QString EMAIL = ui->ancienneteInput_2->text();  // Get email input from the UI
 
-    Fournisseurs fournisseur(IDF, NOM, PRENOM, ADRESSE, NUM_TEL, CATEGORIE_PROD, ANCIENNETE);
+    Fournisseurs fournisseur(IDF, NOM, PRENOM, ADRESSE, NUM_TEL, CATEGORIE_PROD, ANCIENNETE, EMAIL);
 
     if (fournisseur.modifier()) {
         QMessageBox::information(this, "Success", "Supplier modified successfully.");
@@ -232,9 +240,22 @@ void MainWindow::exportDataToPDF() {
 
 
 void MainWindow::on_tri_clicked() {
-    // Get the model from the employe class (this will be your fournisseurs table model sorted by ANCIENNETE)
+    // Get the sorted model from the Fournisseurs class
     QSqlQueryModel *model = fournisseur.sortByAnciennete();
 
-    // Set the model to the table view
-    tableView->setModel(model);
+    // Check if the model is valid before setting it to the table view
+    if (model != nullptr) {
+        ui->tableView->setModel(model);
+    } else {
+        QMessageBox::critical(this, "Error", "Failed to sort data.");
+    }
+}
+
+
+
+void MainWindow::on_QR_code_clicked()
+{
+    QRCodeDialog dialog(this);  // Create an instance of the dialog
+    dialog.setWindowTitle("Generate Employee QR Code");
+    dialog.exec();  // Show the dialog
 }

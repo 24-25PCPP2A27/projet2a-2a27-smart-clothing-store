@@ -347,7 +347,7 @@ background-color: rgb(255, 184, 208);</string>
     <property name="font">
      <font>
       <family>Verdana</family>
-      <pointsize>9</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -594,7 +594,7 @@ background-color: rgb(255, 184, 208);</string>
     <property name="font">
      <font>
       <family>Verdana</family>
-      <pointsize>12</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -844,7 +844,7 @@ background-color: rgb(255, 184, 208);</string>
     <property name="font">
      <font>
       <family>Verdana</family>
-      <pointsize>12</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -1095,7 +1095,7 @@ background-color: rgb(255, 255, 255);</string>
     <property name="font">
      <font>
       <family>Verdana</family>
-      <pointsize>12</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -1346,7 +1346,7 @@ background-color: rgb(255, 255, 255);</string>
     <property name="font">
      <font>
       <family>Verdana</family>
-      <pointsize>12</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -1596,7 +1596,7 @@ background-color: rgb(255, 255, 255);</string>
     <property name="font">
      <font>
       <family>Verdana</family>
-      <pointsize>12</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -1846,7 +1846,7 @@ background-color: rgb(255, 255, 255);</string>
     <property name="font">
      <font>
       <family>Verdana</family>
-      <pointsize>12</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -2096,7 +2096,7 @@ background-color: rgb(255, 255, 255);</string>
     <property name="font">
      <font>
       <family>Verdana</family>
-      <pointsize>9</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -2343,7 +2343,7 @@ background-color: rgb(255, 255, 255);</string>
     <property name="font">
      <font>
       <family>Verdana</family>
-      <pointsize>9</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -2357,7 +2357,7 @@ background-color: rgb(255, 255, 255);</string>
      <rect>
       <x>1060</x>
       <y>420</y>
-      <width>91</width>
+      <width>121</width>
       <height>31</height>
      </rect>
     </property>
@@ -2590,7 +2590,7 @@ background-color: rgb(255, 255, 255);</string>
     <property name="font">
      <font>
       <family>Verdana</family>
-      <pointsize>8</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -2837,7 +2837,7 @@ background-color: rgb(255, 255, 255);</string>
     <property name="font">
      <font>
       <family>Verdana</family>
-      <pointsize>12</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -3084,7 +3084,7 @@ background-color: rgb(255, 255, 255);</string>
     <property name="font">
      <font>
       <family>Verdana</family>
-      <pointsize>12</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -3334,7 +3334,7 @@ background-color: rgb(255, 255, 255);</string>
     <property name="font">
      <font>
       <family>Verdana</family>
-      <pointsize>12</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -3581,7 +3581,7 @@ background-color: rgb(255, 255, 255);</string>
     <property name="font">
      <font>
       <family>Verdana</family>
-      <pointsize>12</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -3828,7 +3828,7 @@ background-color: rgb(255, 255, 255);</string>
     <property name="font">
      <font>
       <family>Verdana</family>
-      <pointsize>12</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -4075,7 +4075,7 @@ background-color: rgb(255, 255, 255);</string>
     <property name="font">
      <font>
       <family>Verdana</family>
-      <pointsize>12</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -4322,7 +4322,7 @@ background-color: rgb(255, 255, 255);</string>
     <property name="font">
      <font>
       <family>Verdana</family>
-      <pointsize>12</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -4569,7 +4569,7 @@ background-color: rgb(255, 255, 255);</string>
     <property name="font">
      <font>
       <family>Verdana</family>
-      <pointsize>12</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -4816,7 +4816,7 @@ background-color: rgb(255, 255, 255);</string>
     <property name="font">
      <font>
       <family>Verdana</family>
-      <pointsize>12</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -5063,7 +5063,7 @@ background-color: rgb(255, 255, 255);</string>
     <property name="font">
      <font>
       <family>Verdana</family>
-      <pointsize>12</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -5080,6 +5080,14 @@ background-color: rgb(255, 255, 255);</string>
       <width>31</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Verdana</family>
+      <pointsize>11</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string/>
@@ -5100,6 +5108,14 @@ background-color: rgb(255, 255, 255);</string>
       <height>141</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Verdana</family>
+      <pointsize>11</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -5118,6 +5134,14 @@ background-color: rgb(255, 255, 255);</string>
       <width>41</width>
       <height>41</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Verdana</family>
+      <pointsize>11</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string/>
@@ -5138,6 +5162,14 @@ background-color: rgb(255, 255, 255);</string>
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Verdana</family>
+      <pointsize>11</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -5151,8 +5183,8 @@ background-color: rgb(255, 255, 255);</string>
    <widget class="QLabel" name="label_7">
     <property name="geometry">
      <rect>
-      <x>90</x>
-      <y>10</y>
+      <x>100</x>
+      <y>20</y>
       <width>341</width>
       <height>16</height>
      </rect>
@@ -5278,7 +5310,7 @@ background-color: rgb(255, 255, 255);</string>
     <property name="font">
      <font>
       <family>Verdana</family>
-      <pointsize>12</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -5292,7 +5324,7 @@ background-color: rgb(255, 255, 255);</string>
      <rect>
       <x>50</x>
       <y>360</y>
-      <width>81</width>
+      <width>111</width>
       <height>31</height>
      </rect>
     </property>
@@ -5525,7 +5557,7 @@ background-color: rgb(255, 255, 255);</string>
     <property name="font">
      <font>
       <family>Verdana</family>
-      <pointsize>9</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -5546,6 +5578,14 @@ background-color: rgb(255, 255, 255);</string>
       <height>91</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Verdana</family>
+      <pointsize>11</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -5560,10 +5600,18 @@ background-color: rgb(255, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>440</y>
+      <y>460</y>
       <width>31</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Verdana</family>
+      <pointsize>11</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string/>
@@ -5584,6 +5632,14 @@ background-color: rgb(255, 255, 255);</string>
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Verdana</family>
+      <pointsize>11</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -5603,6 +5659,14 @@ background-color: rgb(255, 255, 255);</string>
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Verdana</family>
+      <pointsize>11</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -5618,14 +5682,14 @@ background-color: rgb(255, 255, 255);</string>
      <rect>
       <x>50</x>
       <y>410</y>
-      <width>93</width>
+      <width>121</width>
       <height>28</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>Verdana</family>
-      <pointsize>8</pointsize>
+      <pointsize>11</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -5638,10 +5702,18 @@ background-color: rgb(255, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>680</x>
-      <y>0</y>
+      <y>10</y>
       <width>93</width>
       <height>28</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Verdana</family>
+      <pointsize>11</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>trier</string>
@@ -5651,10 +5723,18 @@ background-color: rgb(255, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>450</y>
+      <y>460</y>
       <width>113</width>
       <height>22</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Verdana</family>
+      <pointsize>11</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="styleSheet">
      <string notr="true"> background :rgb(255, 255, 255)</string>
@@ -5668,6 +5748,14 @@ background-color: rgb(255, 255, 255);</string>
       <width>191</width>
       <height>41</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Verdana</family>
+      <pointsize>11</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <item>
      <property name="text">
@@ -5689,6 +5777,27 @@ background-color: rgb(255, 255, 255);</string>
       <string>Produits cosmetiques</string>
      </property>
     </item>
+   </widget>
+   <widget class="QPushButton" name="QR_code">
+    <property name="geometry">
+     <rect>
+      <x>840</x>
+      <y>520</y>
+      <width>93</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Verdana</family>
+      <pointsize>11</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>QR</string>
+    </property>
    </widget>
    <zorder>label_6</zorder>
    <zorder>label_3</zorder>
@@ -5724,6 +5833,7 @@ background-color: rgb(255, 255, 255);</string>
    <zorder>tri</zorder>
    <zorder>lineEdit</zorder>
    <zorder>comboBox_categorie</zorder>
+   <zorder>QR_code</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

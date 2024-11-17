@@ -1,5 +1,7 @@
-QT       += core gui sql network
+QT       += core gui sql network widgets
 QT += core gui charts printsupport
+
+
 
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -22,16 +24,21 @@ SOURCES += \
     emailer.cpp \
     fournisseurs.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    qrcodedialog.cpp \
+    qrcodegen.cpp
 
 HEADERS += \
     connection.h \
     emailer.h \
     fournisseurs.h \
-    mainwindow.h
+    mainwindow.h \
+    qrcodedialog.h \
+    qrcodegen.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    qrcodedialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

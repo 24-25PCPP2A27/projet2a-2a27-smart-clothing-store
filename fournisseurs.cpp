@@ -17,7 +17,7 @@ Fournisseurs::Fournisseurs()
     // Default constructor implementation, if needed.
 }
 
-Fournisseurs::Fournisseurs(int IDF, QString NOM, QString PRENOM, QString ADRESSE, QString NUM_TEL, QString CATEGORIE_PROD, int ANCIENNETE)
+Fournisseurs::Fournisseurs(int IDF, QString NOM, QString PRENOM, QString ADRESSE, QString NUM_TEL, QString CATEGORIE_PROD, int ANCIENNETE,QString EMAIL)
 {
     this->IDF = IDF;
     this->NOM = NOM;
@@ -26,13 +26,14 @@ Fournisseurs::Fournisseurs(int IDF, QString NOM, QString PRENOM, QString ADRESSE
     this->NUM_TEL = NUM_TEL;
     this->CATEGORIE_PROD = CATEGORIE_PROD;
     this->ANCIENNETE = ANCIENNETE;
+    this->EMAIL = EMAIL;
 }
 
 bool Fournisseurs::ajouter()
 {
     QSqlQuery query;
-    query.prepare("INSERT INTO FOURNISSEURS (IDF, NOM, PRENOM, ADRESSE, NUM_TEL, CATEGORIE_PROD, ANCIENNETE) "
-                  "VALUES (:IDF, :NOM, :PRENOM, :ADRESSE, :NUM_TEL, :CATEGORIE_PROD, :ANCIENNETE)");
+    query.prepare("INSERT INTO FOURNISSEURS (IDF, NOM, PRENOM, ADRESSE, NUM_TEL, CATEGORIE_PROD, ANCIENNETE , EMAIL) "
+                  "VALUES (:IDF, :NOM, :PRENOM, :ADRESSE, :NUM_TEL, :CATEGORIE_PROD, :ANCIENNETE,:EMAIL)");
 
     query.bindValue(":IDF", IDF);
     query.bindValue(":ANCIENNETE", ANCIENNETE);
@@ -41,6 +42,7 @@ bool Fournisseurs::ajouter()
     query.bindValue(":ADRESSE", ADRESSE);
     query.bindValue(":NUM_TEL", NUM_TEL);
     query.bindValue(":CATEGORIE_PROD", CATEGORIE_PROD);
+    query.bindValue(":EMAIL", EMAIL);
 
     if (!query.exec()) {
         qDebug() << "Add Error: " << query.lastError().text();
@@ -91,6 +93,7 @@ QSqlQueryModel* Fournisseurs::afficher()
     model->setHeaderData(4, Qt::Horizontal, QObject::tr("Numéro de téléphone"));
     model->setHeaderData(5, Qt::Horizontal, QObject::tr("Catégorie de produit"));
     model->setHeaderData(6, Qt::Horizontal, QObject::tr("Ancienneté"));
+
     return model;
 }
 
@@ -155,27 +158,19 @@ void Fournisseurs::sendEmailNotification(const QString &message)
 
 QSqlQueryModel* Fournisseurs::sortByAnciennete() {
     QSqlQueryModel *model = new QSqlQueryModel();
+    QSqlQuery query;
 
-    // Execute the query
-    model->setQuery("SELECT IDF, NOM, PRENOM, CATEGORIE_PROD, ADRESSE, NUM_TEL, ANCIENNETE FROM FOURNISSEURS ORDER BY ANCIENNETE ASC");
+    query.prepare("SELECT * FROM Fournisseurs ORDER BY ANCIENNETE ASC"); // Tri par ancienneté
 
-    // Check for query errors
-    if (model->lastError().isValid()) {
-        qDebug() << "Query failed: " << model->lastError().text();
-        return nullptr;  // Return nullptr if the query fails
+    if (!query.exec()) {
+        qWarning() << "Error executing query:" << query.lastError().text();
+        return nullptr;  // Si la requête échoue, retourner nullptr
     }
 
-    // Set column headers
-    model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
-    model->setHeaderData(1, Qt::Horizontal, QObject::tr("NOM"));
-    model->setHeaderData(2, Qt::Horizontal, QObject::tr("PRENOM"));
-    model->setHeaderData(3, Qt::Horizontal, QObject::tr("CATEGORIE"));
-    model->setHeaderData(4, Qt::Horizontal, QObject::tr("ADRESSE"));
-    model->setHeaderData(5, Qt::Horizontal, QObject::tr("NUM_TEL"));
-    model->setHeaderData(6, Qt::Horizontal, QObject::tr("ANCIENNETE"));
-
+    model->setQuery(query);
     return model;
 }
+
 
 
 
