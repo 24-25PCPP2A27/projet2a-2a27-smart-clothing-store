@@ -234,6 +234,19 @@
        <string>ExportPDF</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="pushButton_sendEmail">
+      <property name="geometry">
+       <rect>
+        <x>600</x>
+        <y>460</y>
+        <width>93</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Send Email</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_3">
      <attribute name="title">

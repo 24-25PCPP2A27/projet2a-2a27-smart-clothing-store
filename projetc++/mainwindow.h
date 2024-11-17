@@ -22,11 +22,18 @@ private slots: // Ensure that these methods are declared as slots
     void on_pushButton_sort_clicked();
     void on_pushButton_exportPDF_clicked();
     void on_pushButton_showStats_clicked();
+    void sendEmail();
+    void onEmailStatus(const QString &status);
 
+
+    void on_pushButton_sendEmail_clicked();
 
 private:
     Ui::MainWindow *ui;
     void displayLivraisons();
+
+
+
 
 
 };

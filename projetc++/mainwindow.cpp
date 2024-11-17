@@ -12,6 +12,7 @@
 #include <QTableWidget>
 #include <QTableWidgetItem>
 #include "barchartwidget.h"
+#include "smtp.h"
 
 
 
@@ -284,5 +285,32 @@ void MainWindow::on_pushButton_showStats_clicked() {
 }
 
 
+void MainWindow::sendEmail() {
+    // Replace with actual sender credentials and recipient details
+    QString user = "amenbensalah038@gmail.com";
+    QString pass = "amenbsali2002";
+    QString host = "smtp.gmail.com";  // Example for Gmail
+    int port = 465;
+
+    QString from = "your_email@example.com";
+    QString to = "recipient_email@example.com";
+    QString subject = "Test Email";
+    QString body = "This is a test email sent from Qt application.";
+
+    Smtp *smtp = new Smtp(user, pass, host, port);
+    connect(smtp, SIGNAL(status(QString)), this, SLOT(onEmailStatus(QString)));
+    smtp->sendMail(from, to, subject, body);
+}
+
+void MainWindow::onEmailStatus(const QString &status) {
+    QMessageBox::information(this, "Email Status", status);
+}
 
 
+
+
+
+void MainWindow::on_pushButton_sendEmail_clicked()
+{
+    sendEmail();
+}
