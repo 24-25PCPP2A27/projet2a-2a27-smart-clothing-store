@@ -23,22 +23,19 @@ SOURCES += \
     connection.cpp \
     emailer.cpp \
     fournisseurs.cpp \
+    logviewer.cpp \
     main.cpp \
-    mainwindow.cpp \
-    qrcodedialog.cpp \
-    qrcodegen.cpp
+    mainwindow.cpp
 
 HEADERS += \
     connection.h \
     emailer.h \
     fournisseurs.h \
-    mainwindow.h \
-    qrcodedialog.h \
-    qrcodegen.h
+    logviewer.h \
+    mainwindow.h
 
 FORMS += \
-    mainwindow.ui \
-    qrcodedialog.ui
+    mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

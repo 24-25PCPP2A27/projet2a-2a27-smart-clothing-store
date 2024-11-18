@@ -18,6 +18,7 @@
 #include <QVBoxLayout>
 #include <QFileDialog>
 #include <QTableView>
+#include "logviewer.h"
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -26,15 +27,11 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     ui->tableView->setModel(fournisseur.afficher());
-    historiqueModel = new QStandardItemModel(0, 3, this);
-    historiqueModel->setHeaderData(0, Qt::Horizontal, "Action");
-    historiqueModel->setHeaderData(1, Qt::Horizontal, "Details");
-    historiqueModel->setHeaderData(2, Qt::Horizontal, "Date");
-    ui->tableView_2->setModel(historiqueModel);
     connect(ui->stat_Button, &QPushButton::clicked, this, &MainWindow::onStatButtonClicked);
     connect(ui->PDF, &QPushButton::clicked, this, &MainWindow::exportDataToPDF);
     connect(ui->tri, &QPushButton::clicked, this, &MainWindow::on_tri_clicked);
-    connect(ui->QR_code, &QPushButton::clicked, this, &MainWindow::on_QR_code_clicked);
+    connect(ui->pushButton, &QPushButton::clicked, this, &MainWindow::on_openLogViewerButton_clicked);
+
 
 
 
@@ -91,7 +88,7 @@ void MainWindow::on_addButton_clicked()
 
     if (fournisseur.ajouter()) {
         QMessageBox::information(this, "Success", "Supplier added successfully.");
-        updateHistorique("Add Supplier", "Added supplier " + NOM + " " + PRENOM);
+        LogViewer::writeLog("Add Supplier: Added supplier " + NOM + " " + PRENOM);
     } else {
         QMessageBox::critical(this, "Error", "Failed to add supplier.");
     }
@@ -113,12 +110,11 @@ void MainWindow::on_modifyButton_clicked()
 
     if (fournisseur.modifier()) {
         QMessageBox::information(this, "Success", "Supplier modified successfully.");
-        updateHistorique("Modify Supplier", "Modified supplier " + NOM + " " + PRENOM);
+        LogViewer::writeLog("Modify Supplier: Modified supplier " + NOM + " " + PRENOM);
     } else {
         QMessageBox::critical(this, "Error", "Failed to modify supplier.");
     }
 }
-
 
 void MainWindow::on_displayButton_clicked()
 {
@@ -131,11 +127,12 @@ void MainWindow::on_supprimer_Button_2_clicked()
 
     if (fournisseur.supprimer(IDF)) {
         QMessageBox::information(this, "Success", "Supplier deleted successfully.");
-        updateHistorique("Delete Supplier", "Deleted supplier with ID: " + QString::number(IDF));
+        LogViewer::writeLog("Delete Supplier: Deleted supplier with ID: " + QString::number(IDF));
     } else {
         QMessageBox::critical(this, "Error", "Failed to delete supplier.");
     }
 }
+
 
 
 
@@ -255,11 +252,12 @@ void MainWindow::on_tri_clicked() {
 
 
 
-void MainWindow::on_QR_code_clicked()
+
+
+void MainWindow::on_openLogViewerButton_clicked()
 {
-    QRCodeDialog dialog(this);  // Create an instance of the dialog
-    dialog.setWindowTitle("Generate Employee QR Code");
-    dialog.exec();  // Show the dialog
+    LogViewer logViewer;
+    logViewer.exec();
 }
 
 
@@ -267,20 +265,9 @@ void MainWindow::on_QR_code_clicked()
 
 // Dans mainwindow.cpp
 
-void MainWindow::updateHistorique(const QString &action, const QString &details) {
-    // Ajouter une nouvelle action à l'historique
-    HistoriqueAction historique;
-    historique.action = action;
-    historique.details = details;
-    historique.date = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
+// Include the LogViewer header
 
-    historiqueList.append(historique);  // Ajouter à la liste des actions
 
-    // Mettre à jour le modèle pour l'afficher dans la vue
-    QStandardItem *actionItem = new QStandardItem(historique.action);
-    QStandardItem *detailsItem = new QStandardItem(historique.details);
-    QStandardItem *dateItem = new QStandardItem(historique.date);
 
-    // Ajouter la nouvelle ligne au modèle
-    historiqueModel->appendRow({actionItem, detailsItem, dateItem});
-}
+
+

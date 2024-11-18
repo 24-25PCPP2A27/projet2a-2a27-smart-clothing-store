@@ -6,16 +6,10 @@
 #include "fournisseurs.h"
 #include "emailer.h"
 #include <QTableView>
-#include<qrcodedialog.h>
 #include <QList>
 #include <QStandardItemModel>
 #include <QDateTime>
 
-struct HistoriqueAction {
-    QString action;
-    QString details;
-    QString date;
-};
 
 
 
@@ -45,8 +39,9 @@ private slots:
     void onStatButtonClicked();
     void exportDataToPDF();
     void on_tri_clicked();
-    void on_QR_code_clicked();
-    void updateHistorique(const QString &action, const QString &details);
+    void on_openLogViewerButton_clicked();
+
+
 
 
 
@@ -56,8 +51,7 @@ private:
     Ui::MainWindow *ui;
     Fournisseurs fournisseur;  // Instance of the Fournisseurs class
     QTableView *tableView;
-    QList<HistoriqueAction> historiqueList;
-    QStandardItemModel *historiqueModel;
+
 
 };
 

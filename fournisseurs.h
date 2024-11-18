@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QSqlQueryModel>
+#include "logviewer.h"
 
 class Fournisseurs
 {

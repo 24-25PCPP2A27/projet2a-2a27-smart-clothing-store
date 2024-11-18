@@ -46,24 +46,22 @@ bool Fournisseurs::ajouter()
 
     if (!query.exec()) {
         qDebug() << "Add Error: " << query.lastError().text();
+        LogViewer::writeLog("Failed to add fournisseur with IDF = " + QString::number(IDF) + ". Error: " + query.lastError().text());
         return false;
     }
 
-    // Check if the total seniority exceeds a threshold and send an email
+    LogViewer::writeLog("Successfully added fournisseur with IDF = " + QString::number(IDF));
     checkAndSendEmailIfThresholdExceeded();
-
     return true;
 }
+
 
 bool Fournisseurs::modifier()
 {
     QSqlQuery query;
-
-    // Prepare the SQL statement
     query.prepare("UPDATE FOURNISSEURS SET NOM = :NOM, PRENOM = :PRENOM, ADRESSE = :ADRESSE, NUM_TEL = :NUM_TEL, "
                   "CATEGORIE_PROD = :CATEGORIE_PROD, ANCIENNETE = :ANCIENNETE WHERE IDF = :IDF");
 
-    // Bind values to the query
     query.bindValue(":IDF", IDF);
     query.bindValue(":NOM", NOM);
     query.bindValue(":PRENOM", PRENOM);
@@ -72,15 +70,16 @@ bool Fournisseurs::modifier()
     query.bindValue(":CATEGORIE_PROD", CATEGORIE_PROD);
     query.bindValue(":ANCIENNETE", ANCIENNETE);
 
-    // Execute the query
     if (!query.exec()) {
         qDebug() << "Update Error: " << query.lastError().text();
+        LogViewer::writeLog("Failed to update fournisseur with IDF = " + QString::number(IDF) + ". Error: " + query.lastError().text());
         return false;
     }
 
-    qDebug() << "Fournisseur with IDF =" << IDF << "updated successfully.";
+    LogViewer::writeLog("Successfully updated fournisseur with IDF = " + QString::number(IDF));
     return true;
 }
+
 
 QSqlQueryModel* Fournisseurs::afficher()
 {
@@ -101,25 +100,28 @@ bool Fournisseurs::supprimer(int IDF)
 {
     QSqlQuery query;
 
-    // Step 1: Delete dependent records in ARTICLES
-    query.prepare("DELETE FROM ARTICLES WHERE  = :IDF");
+    // Delete dependent records in ARTICLES
+    query.prepare("DELETE FROM ARTICLES WHERE IDF = :IDF");
     query.bindValue(":IDF", IDF);
     if (!query.exec()) {
         qDebug() << "Error deleting dependent records:" << query.lastError().text();
+        LogViewer::writeLog("Failed to delete dependent records for fournisseur with IDF = " + QString::number(IDF) + ". Error: " + query.lastError().text());
         return false;
     }
 
-    // Step 2: Delete the supplier
+    // Delete the supplier
     query.prepare("DELETE FROM FOURNISSEURS WHERE IDF = :IDF");
     query.bindValue(":IDF", IDF);
     if (!query.exec()) {
         qDebug() << "Error deleting supplier:" << query.lastError().text();
+        LogViewer::writeLog("Failed to delete fournisseur with IDF = " + QString::number(IDF) + ". Error: " + query.lastError().text());
         return false;
     }
 
-    qDebug() << "Fournisseur with IDF =" << IDF << "and dependent records deleted successfully.";
+    LogViewer::writeLog("Successfully deleted fournisseur with IDF = " + QString::number(IDF));
     return true;
 }
+
 
 void Fournisseurs::checkAndSendEmailIfThresholdExceeded()
 {
