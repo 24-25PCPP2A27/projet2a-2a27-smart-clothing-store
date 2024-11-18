@@ -5,7 +5,7 @@
 #include <QSslSocket>
 #include <QString>
 #include <QTextStream>
-
+class MainWindow;
 class emailer : public QObject
 {
     Q_OBJECT
@@ -13,9 +13,13 @@ class emailer : public QObject
 public:
     emailer(const QString &user, const QString &pass, const QString &host, int port, int timeout);
     ~emailer();
+    explicit emailer(QObject *parent = nullptr);
+
 
     void sendMail(const QString &from, const QString &to, const QString &subject, const QString &body);
     void sendEmailNotification(const QString &message);
+    signals:
+        void status(const QString &status);
 
 private slots:
     void connected();

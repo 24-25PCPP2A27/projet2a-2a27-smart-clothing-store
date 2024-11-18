@@ -26,6 +26,11 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     ui->tableView->setModel(fournisseur.afficher());
+    historiqueModel = new QStandardItemModel(0, 3, this);
+    historiqueModel->setHeaderData(0, Qt::Horizontal, "Action");
+    historiqueModel->setHeaderData(1, Qt::Horizontal, "Details");
+    historiqueModel->setHeaderData(2, Qt::Horizontal, "Date");
+    ui->tableView_2->setModel(historiqueModel);
     connect(ui->stat_Button, &QPushButton::clicked, this, &MainWindow::onStatButtonClicked);
     connect(ui->PDF, &QPushButton::clicked, this, &MainWindow::exportDataToPDF);
     connect(ui->tri, &QPushButton::clicked, this, &MainWindow::on_tri_clicked);
@@ -69,9 +74,10 @@ void MainWindow::handleEmailStatus(const QString &status)
 {
     QMessageBox::information(this, "Email Status", status);
 }
+// Dans mainwindow.cpp
+
 void MainWindow::on_addButton_clicked()
 {
-    // Retrieve data from input fields
     int IDF = ui->idInput->text().toInt();
     QString NOM = ui->nomInput->text();
     QString PRENOM = ui->prenomInput->text();
@@ -79,19 +85,18 @@ void MainWindow::on_addButton_clicked()
     QString NUM_TEL = ui->numTelInput->text();
     QString CATEGORIE_PROD = ui->comboBox_categorie->currentText();
     int ANCIENNETE = ui->ancienneteInput->text().toInt();
-    QString EMAIL = ui->ancienneteInput_2->text();  // Get email input from the UI
+    QString EMAIL = ui->ancienneteInput_2->text();
 
     Fournisseurs fournisseur(IDF, NOM, PRENOM, ADRESSE, NUM_TEL, CATEGORIE_PROD, ANCIENNETE, EMAIL);
 
     if (fournisseur.ajouter()) {
         QMessageBox::information(this, "Success", "Supplier added successfully.");
-        // Send email notification on success
-        emailer *mailer = new emailer("your_email@example.com", "your_password", "smtp.example.com", 465, 5000);
-        mailer->sendEmailNotification("A new supplier has been added successfully.");
+        updateHistorique("Add Supplier", "Added supplier " + NOM + " " + PRENOM);
     } else {
         QMessageBox::critical(this, "Error", "Failed to add supplier.");
     }
 }
+
 
 void MainWindow::on_modifyButton_clicked()
 {
@@ -102,39 +107,36 @@ void MainWindow::on_modifyButton_clicked()
     QString NUM_TEL = ui->numTelInput->text();
     QString CATEGORIE_PROD = ui->comboBox_categorie->currentText();
     int ANCIENNETE = ui->ancienneteInput->text().toInt();
-    QString EMAIL = ui->ancienneteInput_2->text();  // Get email input from the UI
+    QString EMAIL = ui->ancienneteInput_2->text();
 
     Fournisseurs fournisseur(IDF, NOM, PRENOM, ADRESSE, NUM_TEL, CATEGORIE_PROD, ANCIENNETE, EMAIL);
 
     if (fournisseur.modifier()) {
         QMessageBox::information(this, "Success", "Supplier modified successfully.");
-        // Send email notification on success
-        emailer *mailer = new emailer("your_email@example.com", "your_password", "smtp.example.com", 465, 5000);
-        mailer->sendEmailNotification("A supplier has been modified successfully.");
+        updateHistorique("Modify Supplier", "Modified supplier " + NOM + " " + PRENOM);
     } else {
         QMessageBox::critical(this, "Error", "Failed to modify supplier.");
     }
 }
+
 
 void MainWindow::on_displayButton_clicked()
 {
     QSqlQueryModel *model = fournisseur.afficher();
     ui->tableView->setModel(model);
 }
-
 void MainWindow::on_supprimer_Button_2_clicked()
 {
     int IDF = ui->idInput->text().toInt();
 
     if (fournisseur.supprimer(IDF)) {
         QMessageBox::information(this, "Success", "Supplier deleted successfully.");
-        // Send email notification on success
-        emailer *mailer = new emailer("your_email@example.com", "your_password", "smtp.example.com", 465, 5000);
-        mailer->sendEmailNotification("A supplier has been deleted successfully.");
+        updateHistorique("Delete Supplier", "Deleted supplier with ID: " + QString::number(IDF));
     } else {
         QMessageBox::critical(this, "Error", "Failed to delete supplier.");
     }
 }
+
 
 
 
@@ -258,4 +260,27 @@ void MainWindow::on_QR_code_clicked()
     QRCodeDialog dialog(this);  // Create an instance of the dialog
     dialog.setWindowTitle("Generate Employee QR Code");
     dialog.exec();  // Show the dialog
+}
+
+
+
+
+// Dans mainwindow.cpp
+
+void MainWindow::updateHistorique(const QString &action, const QString &details) {
+    // Ajouter une nouvelle action à l'historique
+    HistoriqueAction historique;
+    historique.action = action;
+    historique.details = details;
+    historique.date = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
+
+    historiqueList.append(historique);  // Ajouter à la liste des actions
+
+    // Mettre à jour le modèle pour l'afficher dans la vue
+    QStandardItem *actionItem = new QStandardItem(historique.action);
+    QStandardItem *detailsItem = new QStandardItem(historique.details);
+    QStandardItem *dateItem = new QStandardItem(historique.date);
+
+    // Ajouter la nouvelle ligne au modèle
+    historiqueModel->appendRow({actionItem, detailsItem, dateItem});
 }
