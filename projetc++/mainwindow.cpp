@@ -13,11 +13,13 @@
 #include <QTableWidgetItem>
 #include "barchartwidget.h"
 #include "smtp.h"
+#include "arduino.h"
 
 
 
 
 // Constructor
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -42,7 +44,7 @@ void MainWindow::on_pushButton_ajouter_clicked()
     QString NUM_TRANSPORTEUR = ui->lineEdit_NUM_TRANSPORTEUR->text().trimmed();
     QString NOM_TRANSPORTEUR = ui->lineEdit_NOM_TRANSPORTEUR->text().trimmed();
     QString ADRESSE_LIV = ui->lineEdit_ADRESSE_LIV->text().trimmed();
-    QString STATUE_LIV = ui->lineEdit_STATUE_LIV->text().trimmed();
+    QString STATUE_LIV = ui->comboBox_STATUE_LIV->currentText();
     int FRAIS_LIV = ui->lineEdit_FRAIS_LIV->text().toInt();
     QDate DATE_LIV = ui->dateEdit_DATE_LIV->date();
 
@@ -287,8 +289,8 @@ void MainWindow::on_pushButton_showStats_clicked() {
 
 void MainWindow::sendEmail() {
     // Replace with actual sender credentials and recipient details
-    QString user = "amenbensalah038@gmail.com";
-    QString pass = "amenbsali2002";
+    QString user = "********";
+    QString pass = "********";
     QString host = "smtp.gmail.com";  // Example for Gmail
     int port = 465;
 
@@ -314,3 +316,50 @@ void MainWindow::on_pushButton_sendEmail_clicked()
 {
     sendEmail();
 }
+
+//arduino
+void MainWindow::handleArduinoData()
+{
+    // Lire les données reçues de l'Arduino
+    QByteArray data = arduino.readFromArduino();
+    QString message = QString::fromStdString(data.toStdString()).trimmed();
+    qDebug() << "Message reçu de l'Arduino:" << message;
+
+    // Vérifier le message reçu et agir en conséquence
+    if (message.startsWith("BUZZER_ON")) {
+        // Activer une alerte si la livraison est proche mais non prête
+        QMessageBox::warning(this, "Attention", "Une livraison Non Prête est proche de la date !");
+    }
+    else if (message.startsWith("STATUS_CHANGE")) {
+        // Exemple de message: STATUS_CHANGE:5:PRET
+        QStringList parts = message.split(":");
+        if (parts.size() == 3) {
+            int IDL = parts[1].toInt();    // ID de la livraison
+            QString newStatus = parts[2]; // Nouveau statut ("PRET" ou "NON_PRET")
+
+            // Mettre à jour le statut dans la base de données
+            QSqlQuery query;
+            query.prepare("UPDATE LIVRAISONS SET STATUE_LIV = :newStatus WHERE IDL = :IDL");
+            query.bindValue(":newStatus", newStatus);
+            query.bindValue(":IDL", IDL);
+
+            if (query.exec()) {
+                qDebug() << "Statut mis à jour pour la livraison IDL:" << IDL;
+                displayLivraisons(); // Rafraîchir l'interface
+                QMessageBox::information(this, "Succès", QString("Le statut de la livraison %1 a été mis à jour en '%2'.").arg(IDL).arg(newStatus));
+            } else {
+                qDebug() << "Erreur lors de la mise à jour du statut:" << query.lastError().text();
+            }
+        }
+    }
+    else {
+        qDebug() << "Message non reconnu reçu de l'Arduino:" << message;
+    }
+}
+
+void MainWindow::on_pushButton_changeStatus_clicked()
+{
+    QByteArray command = "CHANGE_STATUS";
+    arduino.writeToArduino(command);
+}
+

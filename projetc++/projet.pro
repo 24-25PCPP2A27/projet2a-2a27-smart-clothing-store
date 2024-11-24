@@ -1,6 +1,8 @@
 QT       += core gui sql
 QT += printsupport
 QT += core gui network
+QT += serialport
+
 
 
 
@@ -23,6 +25,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+    arduino.cpp \
     barchartwidget.cpp \
     livraisons.cpp \
         main.cpp \
@@ -31,6 +34,7 @@ SOURCES += \
     smtp.cpp
 
 HEADERS += \
+    arduino.h \
     barchartwidget.h \
     livraisons.h \
         mainwindow.h \

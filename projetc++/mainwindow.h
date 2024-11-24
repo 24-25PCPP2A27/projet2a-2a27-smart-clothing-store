@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "arduino.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -27,10 +28,13 @@ private slots: // Ensure that these methods are declared as slots
 
 
     void on_pushButton_sendEmail_clicked();
+    void handleArduinoData();
+    void on_pushButton_changeStatus_clicked();
 
 private:
     Ui::MainWindow *ui;
     void displayLivraisons();
+    Arduino arduino;
 
 
 

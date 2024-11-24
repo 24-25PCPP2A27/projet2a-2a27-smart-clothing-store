@@ -163,7 +163,7 @@ QMap<QString, int> livraisons::getAdresseStats() {
     QMap<QString, int> stats;
     QSqlQuery query;
 
-    // Query to get count of deliveries grouped by ADRESSE_LIV
+
     query.prepare("SELECT ADRESSE_LIV, COUNT(*) as count FROM LIVRAISONS GROUP BY ADRESSE_LIV");
 
     if (!query.exec()) {
@@ -178,3 +178,14 @@ QMap<QString, int> livraisons::getAdresseStats() {
 
     return stats;
 }
+
+#include <QDateTime> // Pour obtenir la date système
+
+bool livraisons::isDateClose(QDate dateLivraison) {
+    QDate today = QDate::currentDate(); // Date système
+    int daysDifference = today.daysTo(dateLivraison);
+
+    // Si la date est à moins de 2 jours de la livraison
+    return daysDifference <= 2 && daysDifference >= 0;
+}
+

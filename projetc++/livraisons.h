@@ -53,6 +53,7 @@ public:
     QSqlQueryModel *rechercher(int id);
     QSqlQueryModel *tri();
     bool valider();
+    bool isDateClose(QDate dateLivraison);
 };
 
 #endif // LIVRAISONS_H

@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -87,9 +87,6 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
-        <widget class="QLineEdit" name="lineEdit_STATUE_LIV"/>
-       </item>
        <item row="5" column="0">
         <widget class="QLabel" name="fraisLivraisonLabel">
          <property name="text">
@@ -115,6 +112,20 @@
          <property name="text">
           <string>ajouter</string>
          </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QComboBox" name="comboBox_STATUE_LIV">
+         <item>
+          <property name="text">
+           <string>Non Prêt</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Prêt</string>
+          </property>
+         </item>
         </widget>
        </item>
       </layout>
