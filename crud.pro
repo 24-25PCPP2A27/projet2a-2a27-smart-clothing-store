@@ -1,4 +1,4 @@
-QT       += core gui sql network widgets
+QT       += core gui sql network widgets serialport
 QT += core gui charts printsupport
 
 
@@ -20,6 +20,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    arduino_input_clavier.cpp \
     connection.cpp \
     emailer.cpp \
     fournisseurs.cpp \
@@ -28,6 +29,7 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
+    arduino_input_clavier.h \
     connection.h \
     emailer.h \
     fournisseurs.h \
