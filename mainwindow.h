@@ -9,6 +9,8 @@
 #include <QList>
 #include <QStandardItemModel>
 #include <QDateTime>
+#include "arduino.h"
+
 
 
 
@@ -40,6 +42,8 @@ private slots:
     void exportDataToPDF();
     void on_tri_clicked();
     void on_openLogViewerButton_clicked();
+    void on_openArduinoDialogButton_clicked();
+
 
 
 
@@ -51,6 +55,7 @@ private:
     Ui::MainWindow *ui;
     Fournisseurs fournisseur;  // Instance of the Fournisseurs class
     QTableView *tableView;
+    Arduino arduino;
 
 
 };

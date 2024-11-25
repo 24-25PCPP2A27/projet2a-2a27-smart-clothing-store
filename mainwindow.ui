@@ -6012,6 +6012,19 @@ background-color: rgb(255, 255, 255);</string>
      <bool>true</bool>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>900</x>
+      <y>550</y>
+      <width>93</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>arduino</string>
+    </property>
+   </widget>
    <zorder>label_3</zorder>
    <zorder>email_label</zorder>
    <zorder>categorie_label</zorder>
@@ -6042,6 +6055,7 @@ background-color: rgb(255, 255, 255);</string>
    <zorder>label_2</zorder>
    <zorder>pushButton</zorder>
    <zorder>label</zorder>
+   <zorder>pushButton_2</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

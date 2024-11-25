@@ -20,7 +20,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    arduino_input_clavier.cpp \
+    arduino.cpp \
+    arduinodialog.cpp \
     connection.cpp \
     emailer.cpp \
     fournisseurs.cpp \
@@ -29,7 +30,8 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
-    arduino_input_clavier.h \
+    arduino.h \
+    arduinodialog.h \
     connection.h \
     emailer.h \
     fournisseurs.h \
@@ -37,7 +39,9 @@ HEADERS += \
     mainwindow.h
 
 FORMS += \
+    arduinodialog.ui \
     mainwindow.ui
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

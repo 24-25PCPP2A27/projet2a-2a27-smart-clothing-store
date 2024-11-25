@@ -19,6 +19,8 @@
 #include <QFileDialog>
 #include <QTableView>
 #include "logviewer.h"
+#include "arduinodialog.h"
+#include "arduino.h"
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -31,6 +33,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->PDF, &QPushButton::clicked, this, &MainWindow::exportDataToPDF);
     connect(ui->tri, &QPushButton::clicked, this, &MainWindow::on_tri_clicked);
     connect(ui->pushButton, &QPushButton::clicked, this, &MainWindow::on_openLogViewerButton_clicked);
+    connect(ui->pushButton_2, &QPushButton::clicked, this, &MainWindow::on_openArduinoDialogButton_clicked);
+
 
 
 
@@ -263,9 +267,21 @@ void MainWindow::on_openLogViewerButton_clicked()
 
 
 
-// Dans mainwindow.cpp
 
-// Include the LogViewer header
+
+void MainWindow::on_openArduinoDialogButton_clicked()
+{
+    // Assurez-vous que vous avez une instance d'Arduino initialisée
+    ArduinoDialog dialog(this, &arduino); // Passer l'instance Arduino à ArduinoDialog
+    dialog.exec();  // Afficher le dialogue
+}
+
+
+
+
+
+
+
 
 
 
