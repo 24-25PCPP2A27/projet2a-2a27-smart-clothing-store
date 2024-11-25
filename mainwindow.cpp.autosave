@@ -1,0 +1,101 @@
+#include "mainwindow.h"
+#include "ui_gestclients.h"
+#include "clients.h"
+#include <QMessageBox>
+
+GestClients::GestClients(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::GestClients)
+{
+    ui->setupUi(this);
+    ui->tableView->setModel(Ctmp.afficher());
+}
+
+GestClients::~GestClients()
+{
+    delete ui;
+}
+
+// Method to handle adding a new client
+void GestClients::on_ajouter_clicked()
+{
+    int idcl = ui->idcl->text().toInt();
+    QString nom = ui->nom->text();
+    QString prenom = ui->prenom->text();
+    QString adresse = ui->adresse->text();
+    QString email = ui->email->text();
+    QString telephone = ui->telephone->text();
+    QString status = ui->status->text();
+    int anciennete = ui->anciennete->text().toInt();
+
+    Clients C(idcl, nom, prenom, adresse, email, telephone, status, anciennete);
+
+    bool test = C.ajouter();
+
+    if (test)
+    {
+        ui->tableView->setModel(Ctmp.afficher());
+        QMessageBox::information(nullptr, QObject::tr("OK"), QObject::tr("Ajout effectué\n"), QMessageBox::Cancel);
+    }
+    else
+    {
+        QMessageBox::critical(nullptr, QObject::tr("Not OK"), QObject::tr("Ajout non effectué.\n"), QMessageBox::Cancel);
+    }
+}
+
+// Method to handle deleting a client
+void GestClients::on_supprimer_clicked()
+{
+    int idcl = ui->idcl->text().toInt();
+    bool test = Ctmp.supprimer(idcl);
+
+    if (test)
+    {
+        ui->tableView->setModel(Ctmp.afficher());
+        QMessageBox::information(nullptr, QObject::tr("OK"), QObject::tr("Suppression"));
+    }
+    else
+    {
+        QMessageBox::critical(nullptr,QObject::tr("Not Ok"), QObject::tr("Suppression non effectuér.\n"), QMessageBox::Cancel);
+    }
+
+}
+
+void GestClients::on_modifier_clicked()
+{
+    int idcl = ui->idcl->text().toInt();
+    QString nom = ui->nom->text();
+    QString prenom = ui->prenom->text();
+    QString adresse = ui->adresse->text();
+    QString email = ui->email->text();
+    QString telephone = ui->telephone->text();
+    QString status = ui->status->text();
+    int anciennete = ui->anciennete->text().toInt();
+
+    Clients C(idcl, nom, prenom, adresse, email, telephone, status, anciennete);
+
+    if (C.modifier())
+    {
+        QMessageBox::information(nullptr, QObject::tr("OK"),
+                    QObject::tr("Modification effectuée\n"
+                                "Click Cancel to exit."), QMessageBox::Cancel);
+        ui->tableView->setModel(Ctmp.afficher());  // Refresh table view
+    }
+    else
+    {
+        QMessageBox::critical(nullptr, QObject::tr("Not OK"),
+                    QObject::tr("Modification non effectuée.\n"
+                                "Click Cancel to exit."), QMessageBox::Cancel);
+    }
+}
+void GestClients::on_trier_clicked()
+{
+    // Call the trier method from Ctmp (Clients instance) to sort by ANCIENNETE
+    QSqlQueryModel *model = Ctmp.trier(ordreAscendant);
+
+    // Update the table view with the sorted data
+    ui->tableView->setModel(model);
+
+    // Toggle the sorting order for the next click
+    ordreAscendant = !ordreAscendant;
+}

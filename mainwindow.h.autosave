@@ -1,0 +1,29 @@
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include <QMainWindow>
+#include "clients.h"
+
+QT_BEGIN_NAMESPACE
+namespace Ui { class GestClients; }
+QT_END_NAMESPACE
+
+class GestClients : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    explicit GestClients(QWidget *parent = nullptr);
+    ~GestClients();
+
+private slots:
+    // Slots pour les boutons CRUD
+    void on_ajouter_clicked();
+    void on_modifier_clicked();
+    void on_supprimer_clicked();
+
+private:
+    Ui::GestClients *ui;
+    Clients Ctmp;
+};
+
