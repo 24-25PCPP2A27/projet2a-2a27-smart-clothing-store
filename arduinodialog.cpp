@@ -4,7 +4,8 @@
 #include "arduino.h"
 #include <QMessageBox>
 #include <QTimer>
-
+#include <QSqlQuery>
+#include <QSqlError>
 ArduinoDialog::ArduinoDialog(QWidget *parent, Arduino *arduinoInstance) :
     QDialog(parent),
     ui(new Ui::ArduinoDialog),
@@ -55,15 +56,23 @@ void ArduinoDialog::connectToArduino()
     }
 }*/
 void ArduinoDialog::readFromArduino() {
-    QByteArray data = arduino->read_from_arduino(); // Call the existing function
+    QByteArray data = arduino->read_from_arduino(); // Read from Arduino
     if (!data.isEmpty()) {
         QString receivedText = QString::fromUtf8(data); // Convert to QString
-        for (QChar c : receivedText) { // Iterate through each character
+        for (QChar c : receivedText) { // Iterate through received characters
             if (c == '#') {
-                // End of input detected, display the buffer
-                ui->lineEdit->setText(buffer); // Display the full sequence
-                buffer.clear(); // Clear the buffer for the next input
-            } else {
+                ui->lineEdit->setText(buffer.trimmed()); // Update the lineEdit
+                searchInDatabase(buffer.trimmed());      // Search in the database
+                buffer.clear();                         // Clear the buffer
+            } else if (c == '*') {
+                // Handle deletion when * is pressed
+                QString currentText = ui->lineEdit->text();
+                if (!currentText.isEmpty()) {
+                    currentText.chop(1); // Remove the last character
+                    ui->lineEdit->setText(currentText); // Update the lineEdit
+                    buffer.chop(1);      // Remove the last character from the buffer
+                }
+            } else if (!c.isSpace()) {
                 // Accumulate data in the buffer
                 buffer.append(c);
             }
@@ -72,6 +81,25 @@ void ArduinoDialog::readFromArduino() {
 }
 
 
+void ArduinoDialog::searchInDatabase(const QString &id_a) {
+    QSqlQuery query;
+    query.prepare("SELECT IDA, QUANTITE FROM ARTICLES WHERE IDA = :id_a");
+    query.bindValue(":id_a", id_a);
+
+    if (query.exec()) {
+        if (query.next()) { // If a record is found
+            QString id = query.value("IDA").toString();
+            QString quantity = query.value("QUANTITE").toString();
+
+            // Display results (update UI widgets as needed)
+            ui->label->setText("IDA: " + id + ", QUANTITE: " + quantity);
+        } else {
+            ui->label->setText("No matching record found.");
+        }
+    } else {
+        qDebug() << "Database query error: " << query.lastError().text();
+    }
+}
 
 
 

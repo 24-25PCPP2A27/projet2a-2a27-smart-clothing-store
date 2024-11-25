@@ -24,6 +24,7 @@ private:
     void connectToArduino();  // Connecter à Arduino
     void readFromArduino();  // Lire depuis Arduino
     QString buffer;
+    void searchInDatabase(const QString &id_a);
 
 private slots:
     void on_pushButtonSend_clicked();
