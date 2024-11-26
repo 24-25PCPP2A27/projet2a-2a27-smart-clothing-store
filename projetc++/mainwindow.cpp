@@ -102,6 +102,36 @@ void MainWindow::on_pushButton_supprimer_clicked()
 }
 
 
+void MainWindow::on_pushButton_modifier_clicked()
+{
+    qDebug() << "Modifier button clicked.";
+
+    int IDL = ui->lineEdit_IDL->text().toInt();
+    QString NUM_TRANSPORTEUR = ui->lineEdit_NUM_TRANSPORTEUR->text().trimmed();
+    QString NOM_TRANSPORTEUR = ui->lineEdit_NOM_TRANSPORTEUR->text().trimmed();
+    QString ADRESSE_LIV = ui->lineEdit_ADRESSE_LIV->text().trimmed();
+    QString STATUE_LIV = ui->comboBox_STATUE_LIV->currentText().trimmed();
+    int FRAIS_LIV = ui->lineEdit_FRAIS_LIV->text().toInt();
+    QDate DATE_LIV = ui->dateEdit_DATE_LIV->date();
+
+    livraisons l;
+    l.setIDL(IDL);
+    l.setNUM_TRANSPORTEUR(NUM_TRANSPORTEUR);
+    l.setNOM_TRANSPORTEUR(NOM_TRANSPORTEUR);
+    l.setADRESSE_LIV(ADRESSE_LIV);
+    l.setSTATUE_LIV(STATUE_LIV);
+    l.setFRAIS_LIV(FRAIS_LIV);
+    l.setDATE_LIV(DATE_LIV);
+
+    if (l.modifier(IDL)) {
+        QMessageBox::information(this, "Success", "Livraison modified successfully.");
+        displayLivraisons();
+    } else {
+        QMessageBox::warning(this, "Error", "Failed to modify livraison.");
+    }
+}
+
+
 
 
 
@@ -283,7 +313,7 @@ void MainWindow::on_pushButton_showStats_clicked() {
     chartWidget->show();
 
     // Switch to the "Statistics" tab
-    ui->tabwidget->setCurrentWidget(ui->tab_4);  // Ensure to name your tab appropriately
+    ui->tabwidget->setCurrentWidget(ui->tab);  // Ensure to name your tab appropriately
 }
 
 

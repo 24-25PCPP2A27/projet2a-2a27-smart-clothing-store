@@ -75,6 +75,36 @@ QSqlQueryModel* livraisons::display() {
     return model;
 }
 
+// Setters Implementation
+void livraisons::setIDL(int id) {
+    this->IDL = id;
+}
+
+void livraisons::setNUM_TRANSPORTEUR(QString num) {
+    this->NUM_TRANSPORTEUR = num;
+}
+
+void livraisons::setNOM_TRANSPORTEUR(QString nom) {
+    this->NOM_TRANSPORTEUR = nom;
+}
+
+void livraisons::setADRESSE_LIV(QString adresse) {
+    this->ADRESSE_LIV = adresse;
+}
+
+void livraisons::setSTATUE_LIV(QString statut) {
+    this->STATUE_LIV = statut;
+}
+
+void livraisons::setFRAIS_LIV(int frais) {
+    this->FRAIS_LIV = frais;
+}
+
+void livraisons::setDATE_LIV(QDate date) {
+    this->DATE_LIV = date;
+}
+
+
 
 
 // Supprimer method

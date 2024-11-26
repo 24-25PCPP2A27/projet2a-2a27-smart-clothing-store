@@ -45,6 +45,7 @@ public:
     void setFRAIS_LIV(int frais);
     void setDATE_LIV(QDate date);
 
+
     // Basic functionalities for livraison management
     bool ajouter();
     QSqlQueryModel *display();
