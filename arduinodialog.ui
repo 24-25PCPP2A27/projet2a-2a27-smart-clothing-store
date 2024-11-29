@@ -6,24 +6,29 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>899</width>
-    <height>609</height>
+    <width>578</width>
+    <height>472</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"> background :rgb(254, 229, 225)</string>
+  </property>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>460</x>
-     <y>80</y>
+     <x>100</x>
+     <y>200</y>
      <width>371</width>
-     <height>251</height>
+     <height>121</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true"> background :rgb(85, 255, 255)</string>
+    <string notr="true">background :rgb(174, 228, 255)
+
+</string>
    </property>
    <property name="text">
     <string/>
@@ -32,11 +37,47 @@
   <widget class="QLineEdit" name="lineEdit">
    <property name="geometry">
     <rect>
-     <x>240</x>
-     <y>80</y>
-     <width>113</width>
-     <height>22</height>
+     <x>200</x>
+     <y>120</y>
+     <width>151</width>
+     <height>31</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background :rgb(174, 228, 255)
+</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>90</y>
+     <width>201</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600; color:#0000ff;&quot;&gt;Ecrire l'identifinat:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>490</x>
+     <y>380</y>
+     <width>81</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>../smart boutique/smartFit.png</pixmap>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>

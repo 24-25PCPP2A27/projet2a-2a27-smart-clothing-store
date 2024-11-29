@@ -2,7 +2,6 @@
 #include "ui_mainwindow.h"
 #include "fournisseurs.h"
 #include <QMessageBox>
-#include "emailer.h"
 #include <QtCharts/QChartView>
 #include <QtCharts/QBarSeries>
 #include <QtCharts/QBarSet>
@@ -21,6 +20,16 @@
 #include "logviewer.h"
 #include "arduinodialog.h"
 #include "arduino.h"
+#include <QTimer>
+#include <QtQuickWidgets/QQuickWidget>
+#include <QQmlContext>
+#include <QtMath> // Pour qDegreesToRadians
+#include <QVariantList>
+#include "connection.h"
+
+
+
+
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -34,6 +43,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->tri, &QPushButton::clicked, this, &MainWindow::on_tri_clicked);
     connect(ui->pushButton, &QPushButton::clicked, this, &MainWindow::on_openLogViewerButton_clicked);
     connect(ui->pushButton_2, &QPushButton::clicked, this, &MainWindow::on_openArduinoDialogButton_clicked);
+    connect(ui->openMailButton, &QPushButton::clicked, this, &MainWindow::on_openMailButton_clicked);
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &MainWindow::onStatButtonClicked); // Appeler la fonction périodiquement
+    timer->start(500); // Rafraîchissement toutes les 1 secondes
 
 
 
@@ -42,11 +55,10 @@ MainWindow::MainWindow(QWidget *parent)
 
 
 
-    // Create an instance of emailer with login credentials
-    emailer *mailer = new emailer("your_email@example.com", "your_password", "smtp.example.com", 465, 5000);
 
-    // Connect emailer status to handleEmailStatus function
-    connect(mailer, SIGNAL(status(QString)), this, SLOT(handleEmailStatus(QString)));
+
+
+
 
     // Connexion du bouton de recherche
     connect(ui->lineEdit, &QLineEdit::returnPressed, [this]() {
@@ -69,7 +81,12 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+    if (mailWidget) {
+        delete mailWidget;
+        mailWidget = nullptr;  // Avoid dangling pointer
+    }
 }
+
 
 void MainWindow::handleEmailStatus(const QString &status)
 {
@@ -88,7 +105,7 @@ void MainWindow::on_addButton_clicked()
     int ANCIENNETE = ui->ancienneteInput->text().toInt();
     QString EMAIL = ui->ancienneteInput_2->text();
 
-    Fournisseurs fournisseur(IDF, NOM, PRENOM, ADRESSE, NUM_TEL, CATEGORIE_PROD, ANCIENNETE, EMAIL);
+    Fournisseurs fournisseurs(IDF, NOM, PRENOM, ADRESSE, NUM_TEL, CATEGORIE_PROD, ANCIENNETE, EMAIL);
 
     if (fournisseur.ajouter()) {
         QMessageBox::information(this, "Success", "Supplier added successfully.");
@@ -165,9 +182,12 @@ void MainWindow::initializeCategoryComboBox() {
     // Ajoutez ici toutes les catégories possibles.
 }
 
+
 void MainWindow::onStatButtonClicked() {
-    // Generate statistics
-    QMap<QString, int> stats;
+    static QMap<QString, int> lastStats; // Stocker les dernières statistiques
+
+    // Générer les statistiques actuelles
+    QMap<QString, int> currentStats;
     QSqlQuery query;
     QString sql = "SELECT CATEGORIE_PROD, COUNT(*) AS count FROM Fournisseurs GROUP BY CATEGORIE_PROD";
 
@@ -179,22 +199,28 @@ void MainWindow::onStatButtonClicked() {
     while (query.next()) {
         QString category = query.value("CATEGORIE_PROD").toString();
         int count = query.value("count").toInt();
-        stats[category] = count;
+        currentStats[category] = count;
     }
 
-    if (stats.isEmpty()) {
-        qWarning() << "No data found for statistics!";
+    if (currentStats == lastStats) {
+        // Si les statistiques n'ont pas changé, ne pas rafraîchir
         return;
     }
 
-    // Create a dialog for the statistics
-    QDialog *dialog = new QDialog(this);
-    dialog->setWindowTitle("Statistics");
-    dialog->resize(600, 400);
+    lastStats = currentStats; // Mettre à jour les statistiques sauvegardées
 
-    // Create a chart
+    // Supprimer les anciens widgets du layout de la frame
+    if (ui->frame->layout()) {
+        QLayoutItem *item;
+        while ((item = ui->frame->layout()->takeAt(0)) != nullptr) {
+            delete item->widget();
+            delete item;
+        }
+    }
+
+    // Créer un graphique avec les nouvelles statistiques
     QtCharts::QPieSeries *series = new QtCharts::QPieSeries();
-    for (auto it = stats.begin(); it != stats.end(); ++it) {
+    for (auto it = currentStats.begin(); it != currentStats.end(); ++it) {
         series->append(it.key(), it.value());
     }
 
@@ -203,18 +229,17 @@ void MainWindow::onStatButtonClicked() {
     chart->setTitle("Fournisseurs Statistics by CATEGORIE_PROD");
     chart->setAnimationOptions(QtCharts::QChart::SeriesAnimations);
 
-    // Create a chart view
     QtCharts::QChartView *chartView = new QtCharts::QChartView(chart);
     chartView->setRenderHint(QPainter::Antialiasing);
 
-    // Add the chart view to the dialog layout
-    QVBoxLayout *layout = new QVBoxLayout(dialog);
+    // Ajouter le graphique à la frame
+    QVBoxLayout *layout = new QVBoxLayout(ui->frame);
     layout->addWidget(chartView);
-    dialog->setLayout(layout);
-
-    // Show the dialog
-    dialog->exec(); // Use exec() for a modal dialog
+    ui->frame->setLayout(layout);
 }
+
+
+
 
 
 
@@ -275,13 +300,13 @@ void MainWindow::on_openArduinoDialogButton_clicked()
     ArduinoDialog dialog(this, &arduino); // Passer l'instance Arduino à ArduinoDialog
     dialog.exec();  // Afficher le dialogue
 }
-
-
-
-
-
-
-
+void MainWindow::on_openMailButton_clicked() {
+    mail *mailDialog = new mail(this); // Create the dialog with `this` as the parent
+    mailDialog->setWindowTitle("Send Email"); // Optional: Set dialog title
+    mailDialog->setModal(true); // Make it modal
+    mailDialog->exec(); // Open the dialog
+    delete mailDialog; // Clean up after the dialog is closed
+}
 
 
 

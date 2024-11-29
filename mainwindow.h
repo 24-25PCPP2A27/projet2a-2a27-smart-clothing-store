@@ -4,13 +4,12 @@
 #include <QMainWindow>
 #include <QSqlQueryModel>
 #include "fournisseurs.h"
-#include "emailer.h"
 #include <QTableView>
 #include <QList>
 #include <QStandardItemModel>
 #include <QDateTime>
 #include "arduino.h"
-
+#include "mail.h"
 
 
 
@@ -43,6 +42,9 @@ private slots:
     void on_tri_clicked();
     void on_openLogViewerButton_clicked();
     void on_openArduinoDialogButton_clicked();
+    void on_openMailButton_clicked();
+
+
 
 
 
@@ -56,6 +58,7 @@ private:
     Fournisseurs fournisseur;  // Instance of the Fournisseurs class
     QTableView *tableView;
     Arduino arduino;
+    mail *mailWidget;
 
 
 };

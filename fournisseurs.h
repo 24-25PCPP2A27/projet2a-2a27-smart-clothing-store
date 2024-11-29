@@ -4,10 +4,19 @@
 #include <QString>
 #include <QSqlQueryModel>
 #include "logviewer.h"
+#include <QObject>
+#include <QList>
+#include <QVariantMap>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QDebug>
+
+
 
 class Fournisseurs
 {
 public:
+
     Fournisseurs();  // Default constructor
     Fournisseurs(int IDF, QString NOM, QString PRENOM, QString ADRESSE, QString NUM_TEL, QString CATEGORIE_PROD, int ANCIENNETE, QString EMAIL);  // Parameterized constructor
 
@@ -18,6 +27,11 @@ public:
     QSqlQueryModel* search(const QString &searchQuery);
     bool exportToPDF(const QString &filePath);
     QSqlQueryModel* sortByAnciennete();
+    void checkAndSendEmailIfThresholdExceeded();
+    void notifyStockZero();
+    void sendEmail(const QString &recipient, const QString &subject, const QString &body);
+
+
 
 
 
@@ -27,8 +41,13 @@ private:
     QString NOM, PRENOM, ADRESSE, NUM_TEL, CATEGORIE_PROD,EMAIL;
     int ANCIENNETE;
 
-    void checkAndSendEmailIfThresholdExceeded();  // Method to check and send email
-    void sendEmailNotification(const QString &message);  // Method to send email notifications
+
+
+
+    void sendEmailNotification(const QString &recipientEmail, const QString &subject, const QString &message);
+    QString getSupplierEmailByArticle(int articleID);
+
+
 
 };
 

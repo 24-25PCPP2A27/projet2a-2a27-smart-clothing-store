@@ -1,5 +1,8 @@
-QT       += core gui sql network widgets serialport
-QT += core gui charts printsupport
+QT       += core gui sql network widgets serialport quick qml
+
+QT +=  charts printsupport  location positioning quickwidgets
+
+
 
 
 
@@ -23,23 +26,26 @@ SOURCES += \
     arduino.cpp \
     arduinodialog.cpp \
     connection.cpp \
-    emailer.cpp \
     fournisseurs.cpp \
     logviewer.cpp \
+    mail.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    smtp.cpp
 
 HEADERS += \
     arduino.h \
     arduinodialog.h \
     connection.h \
-    emailer.h \
     fournisseurs.h \
     logviewer.h \
-    mainwindow.h
+    mail.h \
+    mainwindow.h \
+    smtp.h
 
 FORMS += \
     arduinodialog.ui \
+    mail.ui \
     mainwindow.ui
 
 
@@ -47,3 +53,7 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES +=
+
+RESOURCES +=

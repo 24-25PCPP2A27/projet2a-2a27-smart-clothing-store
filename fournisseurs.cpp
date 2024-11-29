@@ -4,12 +4,13 @@
 #include <QSqlQueryModel>
 #include <QSqlError>
 #include <QDebug>
-#include "emailer.h"  // Include the emailer header
 #include <QPdfWriter>
 #include <QPainter>
 #include <QTextDocument>
 #include <QPrinter>
 #include <QFileDialog>
+#include "smtp.h"
+
 
 
 Fournisseurs::Fournisseurs()
@@ -17,7 +18,7 @@ Fournisseurs::Fournisseurs()
     // Default constructor implementation, if needed.
 }
 
-Fournisseurs::Fournisseurs(int IDF, QString NOM, QString PRENOM, QString ADRESSE, QString NUM_TEL, QString CATEGORIE_PROD, int ANCIENNETE,QString EMAIL)
+Fournisseurs::Fournisseurs(int IDF, QString NOM, QString PRENOM, QString ADRESSE, QString NUM_TEL, QString CATEGORIE_PROD, int ANCIENNETE, QString EMAIL)
 {
     this->IDF = IDF;
     this->NOM = NOM;
@@ -27,6 +28,7 @@ Fournisseurs::Fournisseurs(int IDF, QString NOM, QString PRENOM, QString ADRESSE
     this->CATEGORIE_PROD = CATEGORIE_PROD;
     this->ANCIENNETE = ANCIENNETE;
     this->EMAIL = EMAIL;
+
 }
 
 bool Fournisseurs::ajouter()
@@ -51,7 +53,6 @@ bool Fournisseurs::ajouter()
     }
 
     LogViewer::writeLog("Successfully added fournisseur with IDF = " + QString::number(IDF));
-    checkAndSendEmailIfThresholdExceeded();
     return true;
 }
 
@@ -73,6 +74,7 @@ bool Fournisseurs::modifier()
     if (!query.exec()) {
         qDebug() << "Update Error: " << query.lastError().text();
         LogViewer::writeLog("Failed to update fournisseur with IDF = " + QString::number(IDF) + ". Error: " + query.lastError().text());
+
         return false;
     }
 
@@ -123,46 +125,15 @@ bool Fournisseurs::supprimer(int IDF)
 }
 
 
-void Fournisseurs::checkAndSendEmailIfThresholdExceeded()
-{
-    // Check if the quantity of any article in the ARTICLES table is 0
-    QSqlQuery query;
-    query.prepare("SELECT * FROM ARTICLES WHERE QUANTITE = 0");
-    if (query.exec()) {
-        if (query.next()) {
-            // If quantity reaches zero, send an email notification
-            sendEmailNotification("One of the articles has reached zero quantity.");
-        }
-    } else {
-        qDebug() << "Error checking article quantity: " << query.lastError().text();
-    }
-}
 
-void Fournisseurs::sendEmailNotification(const QString &message)
-{
-    // Email account credentials (replace with actual values)
-    QString email = "jemai.ilef@esprit.tn";   // Sender's email address
-    QString password = "Blanca1Rico23";        // Sender's email password (use environment variable for better security)
-    QString host = "smtp.outlook.com";          // SMTP server (use Gmail's SMTP server if using Gmail)
-    int port = 587;                            // Port (587 for TLS)
-    int timeout = 10000;                       // Timeout in milliseconds
 
-    // Create emailer instance and send email
-    emailer *emailerObj = new emailer(email, password, host, port, timeout);
-
-    // Send email notification using emailerObj
-    emailerObj->sendEmailNotification(message);
-
-    // Clean up after sending the email
-    delete emailerObj;
-}
 
 
 QSqlQueryModel* Fournisseurs::sortByAnciennete() {
     QSqlQueryModel *model = new QSqlQueryModel();
     QSqlQuery query;
 
-    query.prepare("SELECT * FROM Fournisseurs ORDER BY ANCIENNETE ASC"); // Tri par ancienneté
+    query.prepare("SELECT * FROM FOURNISSEURS ORDER BY ANCIENNETE ASC"); // Tri par ancienneté
 
     if (!query.exec()) {
         qWarning() << "Error executing query:" << query.lastError().text();
@@ -218,7 +189,7 @@ bool Fournisseurs::exportToPDF(const QString &filePath) {
     // Prepare an HTML table to structure the data
     htmlContent.append("<h1>Fournisseur Report</h1>");
     htmlContent.append("<table border='1' cellspacing='0' cellpadding='5'>");
-    htmlContent.append("<tr><th>ID</th><th>Nom</th><th>Prenom</th><th>Adresse</th><th>Numéro de Téléphone</th><th>Catégorie Produit</th><th>Ancienneté</th></tr>");
+    htmlContent.append("<tr><th>ID</th><th>Nom</th><th>Prénom</th><th>Adresse</th><th>Numéro de Téléphone</th><th>Catégorie de Produit</th><th>Ancienneté</th><th>Email</th></tr>");
 
     // Query the database to get Fournisseurs data
     QSqlQuery query("SELECT * FROM FOURNISSEURS");
@@ -231,6 +202,7 @@ bool Fournisseurs::exportToPDF(const QString &filePath) {
         htmlContent.append("<td>" + query.value("NUM_TEL").toString() + "</td>");
         htmlContent.append("<td>" + query.value("CATEGORIE_PROD").toString() + "</td>");
         htmlContent.append("<td>" + query.value("ANCIENNETE").toString() + "</td>");
+        htmlContent.append("<td>" + query.value("EMAIL").toString() + "</td>");
         htmlContent.append("</tr>");
     }
     htmlContent.append("</table>");
@@ -248,3 +220,4 @@ bool Fournisseurs::exportToPDF(const QString &filePath) {
 
     return true;  // Return true to indicate success
 };
+
