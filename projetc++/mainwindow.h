@@ -31,6 +31,7 @@ private slots: // Ensure that these methods are declared as slots
     void on_pushButton_sendEmail_clicked();
     void handleArduinoData();
     void on_pushButton_changeStatus_clicked();
+    void on_pushButton_checkDates_clicked();
 
 private:
     Ui::MainWindow *ui;

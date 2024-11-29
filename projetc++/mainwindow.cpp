@@ -27,6 +27,13 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     displayLivraisons(); // Display deliveries when the window is created
+
+    if (arduino.connectArduino() == 0) {
+           qDebug() << "Arduino connected on port:" << arduino.getArduinoPortName();
+           connect(arduino.getSerial(), &QSerialPort::readyRead, this, &MainWindow::handleArduinoData);
+       } else {
+           QMessageBox::warning(this, "Arduino", "Connection to Arduino failed!");
+       }
 }
 
 MainWindow::~MainWindow()
@@ -350,24 +357,22 @@ void MainWindow::on_pushButton_sendEmail_clicked()
 //arduino
 void MainWindow::handleArduinoData()
 {
-    // Lire les données reçues de l'Arduino
     QByteArray data = arduino.readFromArduino();
     QString message = QString::fromStdString(data.toStdString()).trimmed();
     qDebug() << "Message reçu de l'Arduino:" << message;
 
-    // Vérifier le message reçu et agir en conséquence
     if (message.startsWith("BUZZER_ON")) {
-        // Activer une alerte si la livraison est proche mais non prête
+        // Trigger the buzzer when a "Non Pret" delivery is close
         QMessageBox::warning(this, "Attention", "Une livraison Non Prête est proche de la date !");
     }
     else if (message.startsWith("STATUS_CHANGE")) {
-        // Exemple de message: STATUS_CHANGE:5:PRET
+        // Handle status change from Arduino
         QStringList parts = message.split(":");
         if (parts.size() == 3) {
-            int IDL = parts[1].toInt();    // ID de la livraison
-            QString newStatus = parts[2]; // Nouveau statut ("PRET" ou "NON_PRET")
+            int IDL = parts[1].toInt();
+            QString newStatus = parts[2];
 
-            // Mettre à jour le statut dans la base de données
+            // Update status in the database
             QSqlQuery query;
             query.prepare("UPDATE LIVRAISONS SET STATUE_LIV = :newStatus WHERE IDL = :IDL");
             query.bindValue(":newStatus", newStatus);
@@ -375,21 +380,40 @@ void MainWindow::handleArduinoData()
 
             if (query.exec()) {
                 qDebug() << "Statut mis à jour pour la livraison IDL:" << IDL;
-                displayLivraisons(); // Rafraîchir l'interface
+                displayLivraisons(); // Refresh display
                 QMessageBox::information(this, "Succès", QString("Le statut de la livraison %1 a été mis à jour en '%2'.").arg(IDL).arg(newStatus));
             } else {
                 qDebug() << "Erreur lors de la mise à jour du statut:" << query.lastError().text();
             }
         }
     }
-    else {
-        qDebug() << "Message non reconnu reçu de l'Arduino:" << message;
+}
+
+void MainWindow::on_pushButton_checkDates_clicked()
+{
+    livraisons l;
+    QSqlQueryModel *model = l.display();
+    bool alertTriggered = false;
+
+    for (int row = 0; row < model->rowCount(); ++row) {
+        QDate dateLivraison = model->data(model->index(row, 6)).toDate();
+        QString statut = model->data(model->index(row, 4)).toString();
+
+        if (statut == "Non Pret" && l.isDateClose(dateLivraison)) {
+            alertTriggered = true;
+            QByteArray command = "BUZZER_ON";
+            arduino.writeToArduino(command);
+            QMessageBox::warning(this, "Attention", QString("La livraison ID %1 est proche de la date!").arg(model->data(model->index(row, 0)).toInt()));
+        }
+    }
+
+    if (!alertTriggered) {
+        QMessageBox::information(this, "Info", "Aucune livraison proche n'a été trouvée.");
     }
 }
 
 void MainWindow::on_pushButton_changeStatus_clicked()
 {
-    QByteArray command = "CHANGE_STATUS";
+    QByteArray command = "CHANGE_STATUS";  // A command to trigger Arduino to change status
     arduino.writeToArduino(command);
 }
-
