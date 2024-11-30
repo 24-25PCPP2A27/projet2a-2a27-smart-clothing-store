@@ -26,20 +26,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-    arduino.cpp \
     barchartwidget.cpp \
     livraisons.cpp \
         main.cpp \
         mainwindow.cpp \
     connection.cpp \
+    serialcommunication.cpp \
     smtp.cpp
 
 HEADERS += \
-    arduino.h \
     barchartwidget.h \
     livraisons.h \
         mainwindow.h \
     connection.h \
+    serialcommunication.h \
     smtp.h
 
 FORMS += \

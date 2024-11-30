@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "arduino.h"
+#include "serialcommunication.h"  // Include the SerialCommunication class
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -15,7 +15,8 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-private slots: // Ensure that these methods are declared as slots
+
+private slots:
     void on_pushButton_ajouter_clicked();
     void on_pushButton_afficher_clicked();
     void on_pushButton_supprimer_clicked();
@@ -26,21 +27,17 @@ private slots: // Ensure that these methods are declared as slots
     void sendEmail();
     void onEmailStatus(const QString &status);
     void on_pushButton_modifier_clicked();
-
-
     void on_pushButton_sendEmail_clicked();
-    void handleArduinoData();
-    void on_pushButton_changeStatus_clicked();
     void on_pushButton_checkDates_clicked();
+    void onArduinoStatusChange();  // Slot to handle status change from Arduino button
+
+
 
 private:
     Ui::MainWindow *ui;
     void displayLivraisons();
-    Arduino arduino;
-
-
-
-
-
+    SerialCommunication *arduino;  // SerialCommunication object to handle Arduino connection
+     int livraisonID = -1;
 };
+
 #endif // MAINWINDOW_H
