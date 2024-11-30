@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef mainFournisseur_H
+#define mainFournisseur_H
 
 #include <QMainWindow>
 #include <QSqlQueryModel>
@@ -17,16 +17,17 @@
 
 
 namespace Ui {
-class MainWindow;
+class mainFournisseur;
 }
 
-class MainWindow : public QMainWindow
+class mainFournisseur : public QMainWindow
+
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    explicit mainFournisseur(QWidget *parent = nullptr);
+    ~mainFournisseur();
 
 
 private slots:
@@ -54,7 +55,7 @@ private slots:
 
 
 private:
-    Ui::MainWindow *ui;
+    Ui::mainFournisseur *ui;
     Fournisseurs fournisseur;  // Instance of the Fournisseurs class
     QTableView *tableView;
     Arduino arduino;
@@ -63,4 +64,4 @@ private:
 
 };
 
-#endif // MAINWINDOW_H
+#endif // mainFournisseur_H

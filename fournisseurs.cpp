@@ -20,7 +20,7 @@ Fournisseurs::Fournisseurs()
 
 Fournisseurs::Fournisseurs(int IDF, QString NOM, QString PRENOM, QString ADRESSE, QString NUM_TEL, QString CATEGORIE_PROD, int ANCIENNETE, QString EMAIL)
 {
-    this->IDF = IDF;
+    this->IDF = IDF;  // Properly assign IDF
     this->NOM = NOM;
     this->PRENOM = PRENOM;
     this->ADRESSE = ADRESSE;
@@ -28,14 +28,14 @@ Fournisseurs::Fournisseurs(int IDF, QString NOM, QString PRENOM, QString ADRESSE
     this->CATEGORIE_PROD = CATEGORIE_PROD;
     this->ANCIENNETE = ANCIENNETE;
     this->EMAIL = EMAIL;
-
 }
-
 bool Fournisseurs::ajouter()
 {
     QSqlQuery query;
     query.prepare("INSERT INTO FOURNISSEURS (IDF, NOM, PRENOM, ADRESSE, NUM_TEL, CATEGORIE_PROD, ANCIENNETE , EMAIL) "
                   "VALUES (:IDF, :NOM, :PRENOM, :ADRESSE, :NUM_TEL, :CATEGORIE_PROD, :ANCIENNETE,:EMAIL)");
+
+    qDebug() << "Adding fournisseur with IDF:" << IDF;  // Debugging line
 
     query.bindValue(":IDF", IDF);
     query.bindValue(":ANCIENNETE", ANCIENNETE);
@@ -48,11 +48,9 @@ bool Fournisseurs::ajouter()
 
     if (!query.exec()) {
         qDebug() << "Add Error: " << query.lastError().text();
-        LogViewer::writeLog("Failed to add fournisseur with IDF = " + QString::number(IDF) + ". Error: " + query.lastError().text());
         return false;
     }
 
-    LogViewer::writeLog("Successfully added fournisseur with IDF = " + QString::number(IDF));
     return true;
 }
 

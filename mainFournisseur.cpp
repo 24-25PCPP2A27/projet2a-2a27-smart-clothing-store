@@ -1,5 +1,5 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "mainFournisseur.h"
+#include "ui_mainFournisseur.h"
 #include "fournisseurs.h"
 #include <QMessageBox>
 #include <QtCharts/QChartView>
@@ -32,21 +32,22 @@
 
 
 
-MainWindow::MainWindow(QWidget *parent)
+mainFournisseur::mainFournisseur(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+
+    , ui(new Ui::mainFournisseur)
 {
     ui->setupUi(this);
     ui->tableView->setModel(fournisseur.afficher());
-    connect(ui->stat_Button, &QPushButton::clicked, this, &MainWindow::onStatButtonClicked);
-    connect(ui->PDF, &QPushButton::clicked, this, &MainWindow::exportDataToPDF);
-    connect(ui->tri, &QPushButton::clicked, this, &MainWindow::on_tri_clicked);
-    connect(ui->pushButton, &QPushButton::clicked, this, &MainWindow::on_openLogViewerButton_clicked);
-    connect(ui->pushButton_2, &QPushButton::clicked, this, &MainWindow::on_openArduinoDialogButton_clicked);
-    connect(ui->openMailButton, &QPushButton::clicked, this, &MainWindow::on_openMailButton_clicked);
+    connect(ui->PDF, &QPushButton::clicked, this, &mainFournisseur::exportDataToPDF);
+    connect(ui->tri, &QPushButton::clicked, this, &mainFournisseur::on_tri_clicked);
+    connect(ui->pushButton, &QPushButton::clicked, this, &mainFournisseur::on_openLogViewerButton_clicked);
+    connect(ui->pushButton_2, &QPushButton::clicked, this, &mainFournisseur::on_openArduinoDialogButton_clicked);
+    connect(ui->openMailButton, &QPushButton::clicked, this, &mainFournisseur::on_openMailButton_clicked);
     QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &MainWindow::onStatButtonClicked); // Appeler la fonction périodiquement
+    connect(timer, &QTimer::timeout, this, &mainFournisseur::onStatButtonClicked); // Appeler la fonction périodiquement
     timer->start(500); // Rafraîchissement toutes les 1 secondes
+    ui->pageFournisseur->setEnabled(false);
 
 
 
@@ -78,7 +79,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 
 
-MainWindow::~MainWindow()
+mainFournisseur::~mainFournisseur()
 {
     delete ui;
     if (mailWidget) {
@@ -88,26 +89,36 @@ MainWindow::~MainWindow()
 }
 
 
-void MainWindow::handleEmailStatus(const QString &status)
+void mainFournisseur::handleEmailStatus(const QString &status)
 {
     QMessageBox::information(this, "Email Status", status);
 }
-// Dans mainwindow.cpp
+// Dans mainFournisseur.cpp
 
-void MainWindow::on_addButton_clicked()
+void mainFournisseur::on_addButton_clicked()
 {
     int IDF = ui->idInput->text().toInt();
+    if (IDF == 0 && ui->idInput->text() != "0") {
+        QMessageBox::warning(this, "Invalid Input", "IDF must be a valid number.");
+        return;
+    }
+
     QString NOM = ui->nomInput->text();
     QString PRENOM = ui->prenomInput->text();
     QString ADRESSE = ui->adresseInput->text();
     QString NUM_TEL = ui->numTelInput->text();
     QString CATEGORIE_PROD = ui->comboBox_categorie->currentText();
     int ANCIENNETE = ui->ancienneteInput->text().toInt();
-    QString EMAIL = ui->ancienneteInput_2->text();
+    QString EMAIL = ui->emailInput->text(); // Correct field for email.
+
+    qDebug() << "Form values: IDF=" << IDF << ", NOM=" << NOM << ", PRENOM=" << PRENOM
+             << ", ADRESSE=" << ADRESSE << ", NUM_TEL=" << NUM_TEL
+             << ", CATEGORIE_PROD=" << CATEGORIE_PROD << ", ANCIENNETE=" << ANCIENNETE
+             << ", EMAIL=" << EMAIL;
 
     Fournisseurs fournisseurs(IDF, NOM, PRENOM, ADRESSE, NUM_TEL, CATEGORIE_PROD, ANCIENNETE, EMAIL);
 
-    if (fournisseur.ajouter()) {
+    if (fournisseurs.ajouter()) {
         QMessageBox::information(this, "Success", "Supplier added successfully.");
         LogViewer::writeLog("Add Supplier: Added supplier " + NOM + " " + PRENOM);
     } else {
@@ -116,7 +127,7 @@ void MainWindow::on_addButton_clicked()
 }
 
 
-void MainWindow::on_modifyButton_clicked()
+void mainFournisseur::on_modifyButton_clicked()
 {
     int IDF = ui->idInput->text().toInt();
     QString NOM = ui->nomInput->text();
@@ -125,7 +136,7 @@ void MainWindow::on_modifyButton_clicked()
     QString NUM_TEL = ui->numTelInput->text();
     QString CATEGORIE_PROD = ui->comboBox_categorie->currentText();
     int ANCIENNETE = ui->ancienneteInput->text().toInt();
-    QString EMAIL = ui->ancienneteInput_2->text();
+    QString EMAIL = ui->emailInput->text();
 
     Fournisseurs fournisseur(IDF, NOM, PRENOM, ADRESSE, NUM_TEL, CATEGORIE_PROD, ANCIENNETE, EMAIL);
 
@@ -137,12 +148,12 @@ void MainWindow::on_modifyButton_clicked()
     }
 }
 
-void MainWindow::on_displayButton_clicked()
+void mainFournisseur::on_displayButton_clicked()
 {
     QSqlQueryModel *model = fournisseur.afficher();
     ui->tableView->setModel(model);
 }
-void MainWindow::on_supprimer_Button_2_clicked()
+void mainFournisseur::on_supprimer_Button_2_clicked()
 {
     int IDF = ui->idInput->text().toInt();
 
@@ -159,7 +170,7 @@ void MainWindow::on_supprimer_Button_2_clicked()
 
 
 
-void MainWindow::searchFournisseurs(const QString &query)
+void mainFournisseur::searchFournisseurs(const QString &query)
 {
     // Appel de la méthode search() de la classe Fournisseurs
     QSqlQueryModel *model = fournisseur.search(query);  // Utilisation de l'objet 'fournisseur'
@@ -173,7 +184,7 @@ void MainWindow::searchFournisseurs(const QString &query)
 
 
 
-void MainWindow::initializeCategoryComboBox() {
+void mainFournisseur::initializeCategoryComboBox() {
     // Exemple d'ajout de catégories de produit dans le QComboBox
     ui->comboBox_categorie->addItem("Vetementes");
     ui->comboBox_categorie->addItem("accessoires");
@@ -183,7 +194,7 @@ void MainWindow::initializeCategoryComboBox() {
 }
 
 
-void MainWindow::onStatButtonClicked() {
+void mainFournisseur::onStatButtonClicked() {
     static QMap<QString, int> lastStats; // Stocker les dernières statistiques
 
     // Générer les statistiques actuelles
@@ -226,7 +237,7 @@ void MainWindow::onStatButtonClicked() {
 
     QtCharts::QChart *chart = new QtCharts::QChart();
     chart->addSeries(series);
-    chart->setTitle("Fournisseurs Statistics by CATEGORIE_PROD");
+    chart->setTitle("Statistiques des fournisseurs par catégorie de produits");
     chart->setAnimationOptions(QtCharts::QChart::SeriesAnimations);
 
     QtCharts::QChartView *chartView = new QtCharts::QChartView(chart);
@@ -246,7 +257,7 @@ void MainWindow::onStatButtonClicked() {
 
 
 
-void MainWindow::exportDataToPDF() {
+void mainFournisseur::exportDataToPDF() {
     // Open file dialog to choose save location for the PDF
     QString filePath = QFileDialog::getSaveFileName(this, "Enregistrer en tant que PDF", "", "*.pdf");
     if (!filePath.isEmpty()) {
@@ -267,7 +278,7 @@ void MainWindow::exportDataToPDF() {
 }
 
 
-void MainWindow::on_tri_clicked() {
+void mainFournisseur::on_tri_clicked() {
     // Get the sorted model from the Fournisseurs class
     QSqlQueryModel *model = fournisseur.sortByAnciennete();
 
@@ -283,7 +294,7 @@ void MainWindow::on_tri_clicked() {
 
 
 
-void MainWindow::on_openLogViewerButton_clicked()
+void mainFournisseur::on_openLogViewerButton_clicked()
 {
     LogViewer logViewer;
     logViewer.exec();
@@ -294,13 +305,13 @@ void MainWindow::on_openLogViewerButton_clicked()
 
 
 
-void MainWindow::on_openArduinoDialogButton_clicked()
+void mainFournisseur::on_openArduinoDialogButton_clicked()
 {
     // Assurez-vous que vous avez une instance d'Arduino initialisée
     ArduinoDialog dialog(this, &arduino); // Passer l'instance Arduino à ArduinoDialog
     dialog.exec();  // Afficher le dialogue
 }
-void MainWindow::on_openMailButton_clicked() {
+void mainFournisseur::on_openMailButton_clicked() {
     mail *mailDialog = new mail(this); // Create the dialog with `this` as the parent
     mailDialog->setWindowTitle("Send Email"); // Optional: Set dialog title
     mailDialog->setModal(true); // Make it modal

@@ -30,7 +30,7 @@ SOURCES += \
     logviewer.cpp \
     mail.cpp \
     main.cpp \
-    mainwindow.cpp \
+    mainFournisseur.cpp \
     smtp.cpp
 
 HEADERS += \
@@ -40,13 +40,13 @@ HEADERS += \
     fournisseurs.h \
     logviewer.h \
     mail.h \
-    mainwindow.h \
+    mainFournisseur.h \
     smtp.h
 
 FORMS += \
     arduinodialog.ui \
     mail.ui \
-    mainwindow.ui
+    mainFournisseur.ui
 
 
 # Default rules for deployment.
@@ -56,4 +56,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES +=
 
-RESOURCES +=
+RESOURCES += \
+    ressource.qrc
