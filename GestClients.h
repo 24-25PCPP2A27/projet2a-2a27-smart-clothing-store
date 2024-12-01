@@ -33,8 +33,9 @@ private slots:
     void on_rechercheID_clicked();
     void on_pdf_clicked(); // Fonction pour exporter en PDF
     void on_stats_clicked();
-    void on_fid_clicked(); // Méthode pour gérer le clic sur le bouton de fidélité
-
+    void on_calculerPointsFidelite_clicked(); // Calculer les points de fidélité
+    void on_verifierInactivite_clicked();  // Vérifier si un client est inactif
+    void on_ajouterCommandePoints_clicked(); // Ajouter des points via commande
 
 private:
     Ui::GestClients *ui;
@@ -42,7 +43,6 @@ private:
      bool ordreAscendant = true;
      QSqlQueryModel *modelClients; // Le modèle contenant les données des clients
      Clients* clients; // Instance de la classe Clients
-
 
 };
 

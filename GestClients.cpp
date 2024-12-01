@@ -43,24 +43,27 @@ void GestClients::on_ajouter_clicked()
     QString adresse = ui->adresse->text();
     QString email = ui->email->text();
     QString telephone = ui->telephone->text();
-    QString status = ui->status->text();
+    QString status = ui->status->currentText();
     int anciennete = ui->anciennete->text().toInt();
 
-    Clients C(idcl, nom, prenom, adresse, email, telephone, status, anciennete);
+    // Création dynamique de l'objet clients
+    clients = new Clients(idcl, nom, prenom, adresse, email, telephone, status, anciennete);
 
-    bool test = C.ajouter();
-
-    if (test)
-    {
-        ui->tableView->setModel(Ctmp.afficher());
-        QMessageBox::information(nullptr, QObject::tr("OK"), QObject::tr("Ajout effectué\n"), QMessageBox::Cancel);
-    }
-    else
-    {
-        QMessageBox::critical(nullptr, QObject::tr("Not OK"), QObject::tr("Ajout non effectué.\n"), QMessageBox::Cancel);
+    // Ajouter le client
+    if (clients->ajouter()) {
+        QMessageBox::information(this, "Succès", "Client ajouté avec succès et 50 points attribués.");
+    } else {
+        QMessageBox::warning(this, "Erreur", "Erreur lors de l'ajout du client.");
     }
 
+    // Libérer la mémoire utilisée par clients après utilisation
+    delete clients;
+    clients = nullptr;
+
+    // Optionnel : Rafraîchir la vue après l'ajout
+    ui->tableView->setModel(Ctmp.afficher());
 }
+
 
 // Method to handle deleting a client
 void GestClients::on_supprimer_clicked()
@@ -88,7 +91,7 @@ void GestClients::on_modifier_clicked()
     QString adresse = ui->adresse->text();
     QString email = ui->email->text();
     QString telephone = ui->telephone->text();
-    QString status = ui->status->text();
+    QString status = ui->status->currentText();
     int anciennete = ui->anciennete->text().toInt();
 
     Clients C(idcl, nom, prenom, adresse, email, telephone, status, anciennete);
@@ -278,42 +281,38 @@ void GestClients::on_pdf_clicked()
         view->setWindowFlags(Qt::Window | Qt::WindowCloseButtonHint);
         view->show();
     }
-    void GestClients::on_fid_clicked()
+    // Slot pour calculer les points de fidélité
+    void GestClients::on_calculerPointsFidelite_clicked()
     {
-        // ID du client à vérifier
-        int clientId = ui->idcl->text().toInt();  // Récupérer l'ID du client depuis un champ texte
+        int idcl = ui->idcl->text().toInt();
 
-        // Vérifier si l'ID est valide (supérieur à 0)
-        if (clientId <= 0) {
-            QMessageBox::warning(this, "ID Invalide", "Veuillez entrer un ID de client valide.");
-            return;
-        }
+        // Calculer les points pour le client
+        int points = Ctmp.calculerPointsFidelite(idcl);
 
-        // Vérifier si le client existe
-        if (!clients->clients(clientId)) {
-            QMessageBox::warning(this, "Client Inexistant", QString("Aucun client trouvé avec l'ID %1.").arg(clientId));
-            return;
-        }
-
-        // Récupérer les données du client pour calculer les points de fidélité
-        int anciennete = clients->anciennete(clientId); // Exemple de récupération de l'ancienneté du client
-        int pointsBase = clients->calculerPointsFidelite(clientId);
-
-        // Appliquer un multiplicateur en fonction de l'ancienneté
-        float multiplicateur = 1.0;
-        if (anciennete > 5) {
-            multiplicateur = 1.5;  // Bonus pour ancienneté > 5 ans
-        } else if (anciennete > 10) {
-            multiplicateur = 2.0;  // Bonus pour ancienneté > 10 ans
-        }
-
-        // Calculer les points finaux avec le multiplicateur
-        int pointsFinals = static_cast<int>(pointsBase * multiplicateur);
-
-        // Afficher les points de fidélité dans une fenêtre de message
-        QMessageBox::information(this, "Points de Fidélité",
-            QString("Le client avec l'ID %1 a %2 points de fidélité.")
-            .arg(clientId)
-            .arg(pointsFinals));
+        // Afficher le résultat
+        QMessageBox::information(this, "Points de fidélité",
+                                 QString("Le client avec l'ID %1 a %2 points de fidélité.")
+                                 .arg(idcl).arg(points));
     }
 
+    // Slot pour vérifier l'inactivité d'un client
+    void GestClients::on_verifierInactivite_clicked()
+    {
+        int idcl = ui->idcl->text().toInt();
+
+        clients->verifierInactivite(idcl); // Vérifie l'inactivité
+        QMessageBox::information(this, "Vérification d'inactivité", "La vérification d'inactivité a été effectuée.");
+    }
+
+    // Slot pour ajouter des points lors d'une commande
+    void GestClients::on_ajouterCommandePoints_clicked()
+    {
+        int idcl = ui->idcl->text().toInt();
+        int montantCommande = ui->montantCommande->text().toInt();
+
+        // Ajouter des points correspondant au montant de la commande
+        clients->ajouterPoints(idcl, montantCommande);
+
+        QMessageBox::information(this, "Points de fidélité", QString("Le client avec l'ID %1 a reçu %2 points supplémentaires.")
+                                 .arg(idcl).arg(montantCommande));
+    }
