@@ -1,0 +1,12 @@
+INPUT(
+./debug\arduinomanagerafficheur.o
+./debug\article.o
+./debug\barchartwidget.o
+./debug\connectionarticles.o
+./debug\logviewerarticle.o
+./debug\main.o
+./debug\mainwindowarticles.o
+./debug\moc_barchartwidget.o
+./debug\moc_logviewerarticle.o
+./debug\moc_mainwindowarticles.o
+);
