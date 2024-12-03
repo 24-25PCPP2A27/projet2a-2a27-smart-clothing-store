@@ -26,7 +26,7 @@ void SerialCommunication::connectToArduino() {
 
 void SerialCommunication::sendBuzzerCommand() {
     if (serialPort.isOpen()) {
-        serialPort.write("BUZZER_ON");  // Send the command to activate the buzzer
+        serialPort.write("BUZZER_ON");
         qDebug() << "BUZZER_ON command sent to Arduino.";
     } else {
         qDebug() << "Failed to send command: Arduino not connected.";

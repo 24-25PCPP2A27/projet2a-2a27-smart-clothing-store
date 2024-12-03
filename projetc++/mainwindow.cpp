@@ -38,6 +38,11 @@ MainWindow::MainWindow(QWidget *parent)
     connect(timer, &QTimer::timeout, arduino, &SerialCommunication::readFromArduino);
     timer->start(100);  // Call readFromArduino every 100ms
 
+    //calendar
+    connect(ui->pushButton_calendar, &QPushButton::clicked, this, &MainWindow::on_pushButton_calendar_clicked);
+    connect(ui->calendarWidget, &QCalendarWidget::selectionChanged, this, &MainWindow::on_calendarWidget_selectionChanged);
+
+
 
 
 
@@ -378,7 +383,7 @@ void MainWindow::on_pushButton_checkDates_clicked() {
 
             QMessageBox::warning(this, "Attention", QString("La livraison ID %1 est proche de la date!").arg(livraisonID));
 
-            // Optionally, activate the buzzer
+
             arduino->sendBuzzerCommand();
         }
     }
@@ -404,8 +409,60 @@ void MainWindow::onArduinoStatusChange() {
         }
     }
 }
+//calendar
+void MainWindow::on_pushButton_calendar_clicked()
+{
+    ui->calendarWidget->show();  // Display the calendar when the button is clicked
+    highlightLivraisonDates();  // Highlight dates when opening the calendar
+}
 
+void MainWindow::highlightLivraisonDates()
+{
+    QSqlQuery query("SELECT * FROM LIVRAISONS");
 
+    QTextCharFormat redFormat;
+    redFormat.setBackground(Qt::red);  // Color for "Non Pret" status
+
+    QTextCharFormat greenFormat;
+    greenFormat.setBackground(Qt::green);  // Color for "Pret" status
+
+    livraisonDetails.clear();  // Clear previous data
+
+    while (query.next()) {
+        QDate date = query.value("DATE_LIV").toDate();
+        QString status = query.value("STATUE_LIV").toString();
+
+        // Store the record in livraisonDetails
+        livraisonDetails[date].append(query.record());
+
+        // Set calendar color based on status
+        if (status == "Non Pret") {
+            ui->calendarWidget->setDateTextFormat(date, redFormat);
+        } else if (status == "Pret") {
+            ui->calendarWidget->setDateTextFormat(date, greenFormat);
+        }
+    }
+}
+
+void MainWindow::on_calendarWidget_selectionChanged()
+{
+    QDate selectedDate = ui->calendarWidget->selectedDate();
+
+    if (livraisonDetails.contains(selectedDate)) {
+        const QList<QSqlRecord> &records = livraisonDetails[selectedDate];
+
+        QString details;
+        for (const QSqlRecord &record : records) {
+            details += QString("IDL: %1\nStatus: %2\nDate: %3\n\n")
+                            .arg(record.value("IDL").toString())
+                            .arg(record.value("STATUE_LIV").toString())
+                            .arg(record.value("DATE_LIV").toDate().toString());
+        }
+
+        // Show details in a message box
+        QMessageBox::information(this, "Livraison Details", details);
+    }
+}
 
 
 
