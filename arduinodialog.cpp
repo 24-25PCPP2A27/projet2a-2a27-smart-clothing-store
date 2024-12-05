@@ -1,6 +1,6 @@
 // ArduinoDialog.cpp
 #include "arduinodialog.h"
-#include "ui_ArduinoDialog.h"
+#include "ui_arduinodialog.h"
 #include "arduino.h"
 #include <QMessageBox>
 #include <QTimer>
@@ -39,46 +39,103 @@ void ArduinoDialog::connectToArduino()
     }
 }
 
-/*void ArduinoDialog::readFromArduino()
-{
-    // Lire les données provenant de l'Arduino
+
+
+
+
+/*void ArduinoDialog::readFromArduino() {
     QByteArray data = arduino->read_from_arduino();
-
     if (!data.isEmpty()) {
-        // Convertir les données reçues en QString
-        QString receivedData = QString::fromUtf8(data.trimmed());
-
-        // Déboguer pour vérifier les données reçues
-        qDebug() << "Données reçues depuis Arduino : " << receivedData;
-
-        // Mettre à jour le QLineEdit nommé lineEditData avec les données reçues
-        ui->lineEdit->setText(receivedData);
-    }
-}*/
-void ArduinoDialog::readFromArduino() {
-    QByteArray data = arduino->read_from_arduino(); // Read from Arduino
-    if (!data.isEmpty()) {
-        QString receivedText = QString::fromUtf8(data); // Convert to QString
-        for (QChar c : receivedText) { // Iterate through received characters
+        QString receivedText = QString::fromUtf8(data);  // Convertit les données en texte
+        for (const QChar &c : receivedText) {
             if (c == '#') {
-                ui->lineEdit->setText(buffer.trimmed()); // Update the lineEdit
-                searchInDatabase(buffer.trimmed());      // Search in the database
-                buffer.clear();                         // Clear the buffer
+                // Si on rencontre le caractère '#', on récupère l'ID du buffer
+                QString id = buffer.trimmed();  // Enlève les espaces superflus
+                ui->lineEdit->setText(id);  // Affiche l'ID dans le QLineEdit
+                searchInDatabase(id);  // Recherche l'ID dans la base de données
+                buffer.clear();  // Réinitialise le buffer pour le prochain ID
             } else if (c == '*') {
-                // Handle deletion when * is pressed
-                QString currentText = ui->lineEdit->text();
-                if (!currentText.isEmpty()) {
-                    currentText.chop(1); // Remove the last character
-                    ui->lineEdit->setText(currentText); // Update the lineEdit
-                    buffer.chop(1);      // Remove the last character from the buffer
+                // Si on rencontre '*', on enlève le dernier caractère du buffer
+                if (!buffer.isEmpty()) {
+                    buffer.chop(1);
+                    ui->lineEdit->setText(buffer);  // Met à jour le QLineEdit avec le contenu du buffer
                 }
             } else if (!c.isSpace()) {
-                // Accumulate data in the buffer
+                // Si le caractère n'est pas un espace, on l'ajoute au buffer
                 buffer.append(c);
+                ui->lineEdit->setText(buffer);  // Met à jour le QLineEdit avec le buffer actuel
+            }
+        }
+    }
+}*/
+
+/*void ArduinoDialog::readFromArduino() {
+    QByteArray data = arduino->read_from_arduino();
+    if (!data.isEmpty()) {
+        QString receivedText = QString::fromUtf8(data);  // Convertit les données en texte
+        for (const QChar &c : receivedText) {
+            if (c == '#') {
+                // Si on rencontre le caractère '#', on récupère l'ID du buffer
+                QString id = buffer.trimmed();  // Enlève les espaces superflus
+                ui->lineEdit->setText(id);  // Affiche l'ID dans le QLineEdit
+                searchInDatabase(id);  // Recherche l'ID dans la base de données
+                buffer.clear();  // Réinitialise le buffer pour le prochain ID
+            } else if (c == '*') {
+                // Si on rencontre '*', on enlève le dernier caractère du buffer
+                if (!buffer.isEmpty()) {
+                    buffer.chop(1);  // Supprime le dernier caractère du buffer
+                    ui->lineEdit->setText(buffer);  // Met à jour le QLineEdit avec le buffer modifié
+                    qDebug() << "Buffer after *: " << buffer;  // Debug: Affiche le buffer après la suppression
+                }
+            } else if (!c.isSpace()) {
+                // Si le caractère n'est pas un espace, on l'ajoute au buffer
+                buffer.append(c);
+                ui->lineEdit->setText(buffer);  // Met à jour le QLineEdit avec le buffer actuel
+            }
+        }
+    }
+}*/
+
+
+
+void ArduinoDialog::readFromArduino() {
+    QByteArray data = arduino->read_from_arduino();
+    if (!data.isEmpty()) {
+        QString receivedText = QString::fromUtf8(data);  // Convertit les données en texte
+        for (const QChar &c : receivedText) {
+            if (c == '#') {
+                // Si on rencontre le caractère '#', on récupère l'ID du buffer
+                QString id = buffer.trimmed();  // Enlève les espaces superflus
+                ui->lineEdit->setText(id);  // Affiche l'ID dans le QLineEdit
+                searchInDatabase(id);  // Recherche l'ID dans la base de données
+                buffer.clear();  // Réinitialise le buffer pour le prochain ID
+            } else if (c == '*') {
+                // Si on rencontre '*', on enlève le dernier caractère du buffer
+                if (!buffer.isEmpty()) {
+                    buffer.chop(1);  // Supprime le dernier caractère du buffer
+                    ui->lineEdit->setText(buffer);  // Met à jour le QLineEdit avec le buffer modifié
+                    qDebug() << "Buffer after *: " << buffer;  // Debug: Affiche le buffer après la suppression
+                }
+            } else if (!c.isSpace()) {
+                // Si le caractère n'est pas un espace, on l'ajoute au buffer
+                buffer.append(c);
+                ui->lineEdit->setText(buffer);  // Met à jour le QLineEdit avec le buffer actuel
             }
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 void ArduinoDialog::searchInDatabase(const QString &id_a) {

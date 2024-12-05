@@ -2,6 +2,10 @@
 #include <QMessageBox>
 #include "connection.h"
 #include <QApplication>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlQuery>
+#include <QDebug>
 
 int main(int argc, char *argv[])
 {
@@ -22,4 +26,7 @@ int main(int argc, char *argv[])
                               QObject::tr("connection failed.\n"
                                           "Click Cancel to exit."), QMessageBox::Cancel);
     return a.exec();
+
+
+
 }

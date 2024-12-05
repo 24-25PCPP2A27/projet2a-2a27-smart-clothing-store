@@ -95,7 +95,7 @@ void mainFournisseur::handleEmailStatus(const QString &status)
 }
 // Dans mainFournisseur.cpp
 
-void mainFournisseur::on_addButton_clicked()
+/*void mainFournisseur::on_addButton_clicked()
 {
     int IDF = ui->idInput->text().toInt();
     if (IDF == 0 && ui->idInput->text() != "0") {
@@ -124,7 +124,38 @@ void mainFournisseur::on_addButton_clicked()
     } else {
         QMessageBox::critical(this, "Error", "Failed to add supplier.");
     }
+}*/
+
+
+
+void mainFournisseur::on_addButton_clicked() {
+    int IDF = ui->idInput->text().toInt();
+    if (IDF == 0 && ui->idInput->text() != "0") {
+        QMessageBox::warning(this, "Invalid Input", "IDF must be a valid number.");
+        return;
+    }
+
+    QString NOM = ui->nomInput->text();
+    QString PRENOM = ui->prenomInput->text();
+    QString ADRESSE = ui->adresseInput->text();
+    QString NUM_TEL = ui->numTelInput->text();
+    QString CATEGORIE_PROD = ui->comboBox_categorie->currentText();
+    int ANCIENNETE = ui->ancienneteInput->text().toInt();
+    QString EMAIL = ui->emailInput->text();
+
+    Fournisseurs fournisseurs(IDF, NOM, PRENOM, ADRESSE, NUM_TEL, CATEGORIE_PROD, ANCIENNETE, EMAIL);
+
+    if (fournisseurs.ajouter()) {
+        QMessageBox::information(this, "Success", "Supplier added successfully.");
+        LogViewer::writeLog("Add Supplier: Added supplier " + NOM + " " + PRENOM);
+
+        // Rafraîchir les statistiques après l'ajout
+        onStatButtonClicked();
+    } else {
+        QMessageBox::critical(this, "Error", "Failed to add supplier.");
+    }
 }
+
 
 
 void mainFournisseur::on_modifyButton_clicked()
@@ -194,7 +225,7 @@ void mainFournisseur::initializeCategoryComboBox() {
 }
 
 
-void mainFournisseur::onStatButtonClicked() {
+/*void mainFournisseur::onStatButtonClicked() {
     static QMap<QString, int> lastStats; // Stocker les dernières statistiques
 
     // Générer les statistiques actuelles
@@ -248,6 +279,65 @@ void mainFournisseur::onStatButtonClicked() {
     layout->addWidget(chartView);
     ui->frame->setLayout(layout);
 }
+*/
+
+void mainFournisseur::onStatButtonClicked() {
+    static QMap<QString, int> lastStats; // Stocker les dernières statistiques
+
+    // Générer les statistiques actuelles
+    QMap<QString, int> currentStats;
+    QSqlQuery query;
+    QString sql = "SELECT CATEGORIE_PROD, COUNT(*) AS count FROM Fournisseurs GROUP BY CATEGORIE_PROD";
+
+    if (!query.exec(sql)) {
+        qWarning() << "Error executing query:" << query.lastError().text();
+        return;
+    }
+
+    while (query.next()) {
+        QString category = query.value("CATEGORIE_PROD").toString();
+        int count = query.value("count").toInt();
+        currentStats[category] = count;
+    }
+
+    if (currentStats == lastStats) {
+        // Si les statistiques n'ont pas changé, ne pas recréer le graphique
+        return;
+    }
+
+    lastStats = currentStats; // Mettre à jour les statistiques sauvegardées
+
+    // Vérifier s'il y a déjà un layout et le supprimer correctement
+    QLayout *existingLayout = ui->frame->layout();
+    if (existingLayout) {
+        QLayoutItem *item;
+        while ((item = existingLayout->takeAt(0)) != nullptr) {
+            delete item->widget(); // Supprimer les widgets associés
+            delete item;           // Supprimer l'élément du layout
+        }
+        delete existingLayout;     // Supprimer le layout lui-même
+    }
+
+    // Créer un graphique avec les nouvelles statistiques
+    QtCharts::QPieSeries *series = new QtCharts::QPieSeries();
+    for (auto it = currentStats.begin(); it != currentStats.end(); ++it) {
+        series->append(it.key(), it.value());
+    }
+
+    QtCharts::QChart *chart = new QtCharts::QChart();
+    chart->addSeries(series);
+    chart->setTitle("Statistiques des fournisseurs par catégorie de produits");
+    chart->setAnimationOptions(QtCharts::QChart::SeriesAnimations);
+
+    QtCharts::QChartView *chartView = new QtCharts::QChartView(chart);
+    chartView->setRenderHint(QPainter::Antialiasing);
+
+    // Ajouter le graphique à la frame avec un nouveau layout
+    QVBoxLayout *layout = new QVBoxLayout();
+    layout->addWidget(chartView);
+    ui->frame->setLayout(layout);
+}
+
 
 
 
@@ -275,7 +365,12 @@ void mainFournisseur::exportDataToPDF() {
                                   QObject::tr("Échec de l'exportation des données en PDF."));
         }
     }
+
 }
+
+
+
+
 
 
 void mainFournisseur::on_tri_clicked() {
@@ -311,15 +406,17 @@ void mainFournisseur::on_openArduinoDialogButton_clicked()
     ArduinoDialog dialog(this, &arduino); // Passer l'instance Arduino à ArduinoDialog
     dialog.exec();  // Afficher le dialogue
 }
+// Déclaration de la fonction
 void mainFournisseur::on_openMailButton_clicked() {
-    mail *mailDialog = new mail(this); // Create the dialog with `this` as the parent
+    mail *mailDialog = new mail(this); // Create the dialog with this as the parent
     mailDialog->setWindowTitle("Send Email"); // Optional: Set dialog title
     mailDialog->setModal(true); // Make it modal
     mailDialog->exec(); // Open the dialog
     delete mailDialog; // Clean up after the dialog is closed
-}
+}  // <- Cette accolade ferme la fonction
 
+// Vérifiez qu'aucune autre fonction n'a des accolades non fermées au-dessus de celle-ci
 
-
-
+// Fin de la classe mainFournisseur
+ // <- Cette accolade ferme la classe mainFournisseur
 

@@ -10,7 +10,7 @@
 #include <QPrinter>
 #include <QFileDialog>
 #include "smtp.h"
-
+#include <QTimer>
 
 
 Fournisseurs::Fournisseurs()
@@ -79,7 +79,31 @@ bool Fournisseurs::modifier()
     LogViewer::writeLog("Successfully updated fournisseur with IDF = " + QString::number(IDF));
     return true;
 }
+// Fonction pour supprimer un fournisseur
+bool Fournisseurs::supprimer(int IDF){
+    QSqlQuery query;
 
+    // Supprimer les enregistrements dépendants dans ARTICLES
+    query.prepare("DELETE FROM ARTICLES WHERE IDF = :IDF");
+    query.bindValue(":IDF", IDF);
+    if (!query.exec()) {
+        qDebug() << "Erreur lors de la suppression des enregistrements dépendants:" << query.lastError().text();
+        LogViewer::writeLog("Échec de la suppression des enregistrements dépendants pour le fournisseur avec IDF = " + QString::number(IDF) + ". Erreur: " + query.lastError().text());
+        return false;
+    }
+
+    // Supprimer le fournisseur
+    query.prepare("DELETE FROM FOURNISSEURS WHERE IDF = :IDF");
+    query.bindValue(":IDF", IDF);
+    if (!query.exec()) {
+        qDebug() << "Erreur lors de la suppression du fournisseur:" << query.lastError().text();
+        LogViewer::writeLog("Échec de la suppression du fournisseur avec IDF = " + QString::number(IDF) + ". Erreur: " + query.lastError().text());
+        return false;
+    }
+
+    LogViewer::writeLog("Suppression réussie du fournisseur avec IDF = " + QString::number(IDF));
+    return true;
+}
 
 QSqlQueryModel* Fournisseurs::afficher()
 {
@@ -95,39 +119,74 @@ QSqlQueryModel* Fournisseurs::afficher()
 
     return model;
 }
+ QSqlQueryModel* Fournisseurs::search(const QString &searchQuery){
+        QSqlQueryModel *model = new QSqlQueryModel();
 
-bool Fournisseurs::supprimer(int IDF)
-{
+        // SQL query to search across NOM, PRENOM, and CATEGORIE_PROD fields
+        QString queryStr = "SELECT * FROM FOURNISSEURS WHERE "
+                           "NOM LIKE :query OR "
+                           "PRENOM LIKE :query OR "
+                           "CATEGORIE_PROD LIKE :query";
+
+        QSqlQuery query;
+        query.prepare(queryStr);
+        query.bindValue(":query", "%" + searchQuery + "%"); // Use wildcards for partial matching
+
+        if (query.exec()) {
+            model->setQuery(query);
+
+            // Optionally set column headers for your table
+            model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
+            model->setHeaderData(1, Qt::Horizontal, QObject::tr("Nom"));
+            model->setHeaderData(2, Qt::Horizontal, QObject::tr("Prenom"));
+            model->setHeaderData(3, Qt::Horizontal, QObject::tr("Adresse"));
+            model->setHeaderData(4, Qt::Horizontal, QObject::tr("Numéro de téléphone"));
+            model->setHeaderData(5, Qt::Horizontal, QObject::tr("Catégorie de produit"));
+            model->setHeaderData(6, Qt::Horizontal, QObject::tr("Ancienneté"));
+        } else {
+            qDebug() << "Error in query execution: " << query.lastError();
+        }
+
+        return model;
+    }
+
+
+
+
+/*// Fonction pour supprimer un fournisseur
+bool Fournisseurs::supprimer(int IDF){
     QSqlQuery query;
 
-    // Delete dependent records in ARTICLES
+    // Supprimer les enregistrements dépendants dans ARTICLES
     query.prepare("DELETE FROM ARTICLES WHERE IDF = :IDF");
     query.bindValue(":IDF", IDF);
     if (!query.exec()) {
-        qDebug() << "Error deleting dependent records:" << query.lastError().text();
-        LogViewer::writeLog("Failed to delete dependent records for fournisseur with IDF = " + QString::number(IDF) + ". Error: " + query.lastError().text());
+        qDebug() << "Erreur lors de la suppression des enregistrements dépendants:" << query.lastError().text();
+        LogViewer::writeLog("Échec de la suppression des enregistrements dépendants pour le fournisseur avec IDF = " + QString::number(IDF) + ". Erreur: " + query.lastError().text());
         return false;
     }
 
-    // Delete the supplier
+    // Supprimer le fournisseur
     query.prepare("DELETE FROM FOURNISSEURS WHERE IDF = :IDF");
     query.bindValue(":IDF", IDF);
     if (!query.exec()) {
-        qDebug() << "Error deleting supplier:" << query.lastError().text();
-        LogViewer::writeLog("Failed to delete fournisseur with IDF = " + QString::number(IDF) + ". Error: " + query.lastError().text());
+        qDebug() << "Erreur lors de la suppression du fournisseur:" << query.lastError().text();
+        LogViewer::writeLog("Échec de la suppression du fournisseur avec IDF = " + QString::number(IDF) + ". Erreur: " + query.lastError().text());
         return false;
     }
 
-    LogViewer::writeLog("Successfully deleted fournisseur with IDF = " + QString::number(IDF));
+    LogViewer::writeLog("Suppression réussie du fournisseur avec IDF = " + QString::number(IDF));
     return true;
-}
+}*/
 
 
 
 
 
 
-QSqlQueryModel* Fournisseurs::sortByAnciennete() {
+
+QSqlQueryModel* Fournisseurs::sortByAnciennete()
+{
     QSqlQueryModel *model = new QSqlQueryModel();
     QSqlQuery query;
 
@@ -146,7 +205,7 @@ QSqlQueryModel* Fournisseurs::sortByAnciennete() {
 
 
 
-QSqlQueryModel* Fournisseurs::search(const QString &searchQuery)
+/*QSqlQueryModel* Fournisseurs::search(const QString &searchQuery)
 {
     QSqlQueryModel *model = new QSqlQueryModel();
 
@@ -176,7 +235,7 @@ QSqlQueryModel* Fournisseurs::search(const QString &searchQuery)
     }
 
     return model;
-}
+}*/
 
 
 
@@ -217,5 +276,6 @@ bool Fournisseurs::exportToPDF(const QString &filePath) {
     document.print(&printer);
 
     return true;  // Return true to indicate success
-};
+}
+
 
