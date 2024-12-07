@@ -1,0 +1,29 @@
+<RCC>
+    <qresource prefix="/">
+        <file>background (2).png</file>
+        <file>photos interface/QT/add-page_15786888.png</file>
+        <file>photos interface/QT/collection_8478249.png</file>
+        <file>photos interface/QT/customs_6448709.png</file>
+        <file>photos interface/QT/delivery_1849215.png</file>
+        <file>photos interface/QT/download-pdf_6348573.png</file>
+        <file>photos interface/QT/fashion_8478306.png</file>
+        <file>photos interface/QT/fast-delivery_1792855.png</file>
+        <file>photos interface/QT/handbag_2822424.png</file>
+        <file>photos interface/QT/market-penetration_15178126.png</file>
+        <file>photos interface/QT/organization_2825877.png</file>
+        <file>photos interface/QT/product-delivery_17627513.png</file>
+        <file>photos interface/QT/pyjamas_2554103.png</file>
+        <file>photos interface/QT/rating_4149882.png</file>
+        <file>photos interface/QT/remove_7695824.png</file>
+        <file>photos interface/QT/search_4180975.png</file>
+        <file>photos interface/QT/shopping-cart_17641476.png</file>
+        <file>photos interface/QT/target_1605350.png</file>
+        <file>photos interface/QT/update_4370942.png</file>
+        <file>gestion des fournisseures (1).png</file>
+        <file>gestion des fournisseures.png</file>
+        <file>chip_2292034.png</file>
+        <file>email_3296464.png</file>
+        <file>history_1373354.png</file>
+        <file>smartFit.png</file>
+    </qresource>
+</RCC>
