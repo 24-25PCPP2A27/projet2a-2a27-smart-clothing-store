@@ -38,6 +38,7 @@ private slots:
     void on_openArduinoDialogButton_clicked();  // Slot for opening Arduino dialog
     void on_openMailButton_clicked();  // Slot for opening mail widget
     void on_pageClient_clicked();
+    void on_pageLivraison_clicked();
 
 private:
     Ui::mainFournisseur *ui;  // UI object
@@ -45,6 +46,7 @@ private:
     QTableView *tableView;  // Table view for displaying suppliers
     Arduino arduino;  // Instance of Arduino class for handling hardware interactions
     mail *mailWidget;  // Pointer to mail widget for email functionalities
+
 };
 
 #endif // MAINFOURNISSEUR_H

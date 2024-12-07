@@ -27,6 +27,7 @@
 #include <QVariantList>
 #include "connection.h"
 #include "gestclients.h"
+#include "mainwindow.h"
 
 
 mainFournisseur::mainFournisseur(QWidget *parent)
@@ -427,6 +428,20 @@ void mainFournisseur::on_pageClient_clicked()
 
     // Afficher la fenêtre clients
     clientsWindow->show();
+
+    // Ne pas fermer mainFournisseur ici. La fenêtre reste ouverte, mais non interactive.
+}
+
+void mainFournisseur::on_pageLivraison_clicked()
+{
+    // Créer une nouvelle instance de l'interface GestClients
+    MainWindow *livraisonWindow = new MainWindow(this);
+
+    // Rendre la fenêtre GestClients modale (bloquante)
+    livraisonWindow->setWindowModality(Qt::ApplicationModal);
+
+    // Afficher la fenêtre clients
+    livraisonWindow->show();
 
     // Ne pas fermer mainFournisseur ici. La fenêtre reste ouverte, mais non interactive.
 }

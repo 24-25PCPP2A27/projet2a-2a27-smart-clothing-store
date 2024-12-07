@@ -20,6 +20,8 @@
 #include <QSqlQuery>
 #include<QDateTime>
 #include <QColor>
+#include "mainFournisseur.h"
+#include "mainwindow.h"
 
 GestClients::GestClients(QWidget *parent) :
     QMainWindow(parent),
@@ -398,3 +400,34 @@ void GestClients::on_stats_clicked() {
                                      QString("Client with ID %1 is active. No points were reset.").arg(idcl));
         }
     }
+
+
+
+
+    void GestClients::on_pageFournisseur_clicked()
+    {
+        // Créer une nouvelle instance de l'interface GestClients
+        mainFournisseur *fournisseurWindow = new mainFournisseur(this);
+
+        // Rendre la fenêtre GestClients modale (bloquante)
+        fournisseurWindow->setWindowModality(Qt::ApplicationModal);
+
+        // Afficher la fenêtre clients
+        fournisseurWindow->show();
+
+        // Ne pas fermer mainFournisseur ici. La fenêtre reste ouverte, mais non interactive.
+    }
+    void GestClients::on_pageLivraison_clicked()
+    {
+        // Créer une nouvelle instance de l'interface GestClients
+        MainWindow *livraisonWindow = new MainWindow(this);
+
+        // Rendre la fenêtre GestClients modale (bloquante)
+        livraisonWindow->setWindowModality(Qt::ApplicationModal);
+
+        // Afficher la fenêtre clients
+        livraisonWindow->show();
+
+        // Ne pas fermer mainFournisseur ici. La fenêtre reste ouverte, mais non interactive.
+    }
+

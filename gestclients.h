@@ -36,6 +36,8 @@ private slots:
     void on_calculerPointsFidelite_clicked(); // Calculer les points de fidélité
     void on_verifierInactivite_clicked();  // Vérifier si un client est inactif
     void on_ajouterCommandePoints_clicked(); // Ajouter des points via commande
+    void on_pageFournisseur_clicked();
+    void on_pageLivraison_clicked();
 
 private:
     Ui::GestClients *ui;

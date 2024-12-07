@@ -31,32 +31,41 @@ SOURCES += \
     GestClients.cpp \
     arduino.cpp \
     arduinodialog.cpp \
+    barchartwidget.cpp \
     clients.cpp \
     connection.cpp \
     fournisseurs.cpp \
+    livraisons.cpp \
     logviewer.cpp \
     mail.cpp \
     main.cpp \
     mainFournisseur.cpp \
+    mainwindow.cpp \
+    serialcommunication.cpp \
     smtp.cpp
 
 HEADERS += \
     GestClients.h \
     arduino.h \
     arduinodialog.h \
+    barchartwidget.h \
     clients.h \
     connection.h \
     fournisseurs.h \
+    livraisons.h \
     logviewer.h \
     mail.h \
     mainFournisseur.h \
+    mainwindow.h \
+    serialcommunication.h \
     smtp.h
 
 FORMS += \
     GestClients.ui \
     arduinodialog.ui \
     mail.ui \
-    mainFournisseur.ui
+    mainFournisseur.ui \
+    mainwindow.ui
 
 
 # Default rules for deployment.
