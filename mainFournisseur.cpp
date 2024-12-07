@@ -419,7 +419,7 @@ void mainFournisseur::on_openMailButton_clicked() {
  // <- Cette accolade ferme la classe mainFournisseur
 
 void mainFournisseur::on_pageClient_clicked()
-{
+{      this->close();
     // Créer une nouvelle instance de l'interface GestClients
     GestClients *clientsWindow = new GestClients(this);
 
@@ -430,10 +430,11 @@ void mainFournisseur::on_pageClient_clicked()
     clientsWindow->show();
 
     // Ne pas fermer mainFournisseur ici. La fenêtre reste ouverte, mais non interactive.
+
 }
 
 void mainFournisseur::on_pageLivraison_clicked()
-{
+{     this->close();
     // Créer une nouvelle instance de l'interface GestClients
     MainWindow *livraisonWindow = new MainWindow(this);
 
@@ -444,4 +445,5 @@ void mainFournisseur::on_pageLivraison_clicked()
     livraisonWindow->show();
 
     // Ne pas fermer mainFournisseur ici. La fenêtre reste ouverte, mais non interactive.
+
 }

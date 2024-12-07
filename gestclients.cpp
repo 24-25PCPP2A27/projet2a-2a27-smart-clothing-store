@@ -405,7 +405,7 @@ void GestClients::on_stats_clicked() {
 
 
     void GestClients::on_pageFournisseur_clicked()
-    {
+    {     this->close();
         // Créer une nouvelle instance de l'interface GestClients
         mainFournisseur *fournisseurWindow = new mainFournisseur(this);
 
@@ -416,9 +416,10 @@ void GestClients::on_stats_clicked() {
         fournisseurWindow->show();
 
         // Ne pas fermer mainFournisseur ici. La fenêtre reste ouverte, mais non interactive.
+
     }
     void GestClients::on_pageLivraison_clicked()
-    {
+    {   this->close();
         // Créer une nouvelle instance de l'interface GestClients
         MainWindow *livraisonWindow = new MainWindow(this);
 
@@ -429,5 +430,6 @@ void GestClients::on_stats_clicked() {
         livraisonWindow->show();
 
         // Ne pas fermer mainFournisseur ici. La fenêtre reste ouverte, mais non interactive.
+
     }
 

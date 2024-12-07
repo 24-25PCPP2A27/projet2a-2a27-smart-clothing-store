@@ -513,7 +513,7 @@ void MainWindow::on_calendarWidget_selectionChanged()
 }
 
 void MainWindow::on_pageClient_clicked()
-{
+{    this->close();
     // Créer une nouvelle instance de l'interface GestClients
     GestClients *clientsWindow = new GestClients(this);
 
@@ -524,10 +524,11 @@ void MainWindow::on_pageClient_clicked()
     clientsWindow->show();
 
     // Ne pas fermer mainFournisseur ici. La fenêtre reste ouverte, mais non interactive.
+
 }
 
 void MainWindow::on_pageFournisseur_clicked()
-{
+{     this->close();
     // Créer une nouvelle instance de l'interface GestClients
     mainFournisseur *fournisseurWindow = new mainFournisseur(this);
 
@@ -538,6 +539,7 @@ void MainWindow::on_pageFournisseur_clicked()
     fournisseurWindow->show();
 
     // Ne pas fermer mainFournisseur ici. La fenêtre reste ouverte, mais non interactive.
+
 }
 
 
