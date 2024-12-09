@@ -20,7 +20,7 @@
 #include <QtCharts/QPieSlice>
 #include "gestclients.h"
 #include "mainFournisseur.h"
-
+#include "mainwindowarticles.h"
 
 
 
@@ -544,7 +544,20 @@ void MainWindow::on_pageFournisseur_clicked()
 
 
 
+void MainWindow::on_pageArticle_clicked()
+{     this->close();
+    // Créer une nouvelle instance de l'interface GestClients
+    MainWindowArticles *articleWindow = new MainWindowArticles(this);
 
+    // Rendre la fenêtre GestClients modale (bloquante)
+    articleWindow->setWindowModality(Qt::ApplicationModal);
+
+    // Afficher la fenêtre clients
+    articleWindow->show();
+
+    // Ne pas fermer mainFournisseur ici. La fenêtre reste ouverte, mais non interactive.
+
+}
 
 
 

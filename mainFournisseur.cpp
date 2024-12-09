@@ -28,6 +28,7 @@
 #include "connection.h"
 #include "gestclients.h"
 #include "mainwindow.h"
+#include "mainwindowarticles.h"
 
 
 mainFournisseur::mainFournisseur(QWidget *parent)
@@ -42,10 +43,11 @@ mainFournisseur::mainFournisseur(QWidget *parent)
     connect(ui->pushButton, &QPushButton::clicked, this, &mainFournisseur::on_openLogViewerButton_clicked);
     connect(ui->pushButton_2, &QPushButton::clicked, this, &mainFournisseur::on_openArduinoDialogButton_clicked);
     connect(ui->openMailButton, &QPushButton::clicked, this, &mainFournisseur::on_openMailButton_clicked);
-    QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &mainFournisseur::onStatButtonClicked); // Appeler la fonction périodiquement
-    timer->start(500); // Rafraîchissement toutes les 1 secondes
+    //QTimer *timer = new QTimer(this);
+    //connect(timer, &QTimer::timeout, this, &mainFournisseur::onStatButtonClicked); // Appeler la fonction périodiquement
+    //timer->start(500); // Rafraîchissement toutes les 1 secondes
     ui->pageFournisseur->setEnabled(false);
+
 
 
 
@@ -69,7 +71,8 @@ mainFournisseur::mainFournisseur(QWidget *parent)
 
     });
 
-
+    QSqlQueryModel *model = fournisseur.afficher();
+    ui->tableView->setModel(model);
 
     };
 
@@ -146,9 +149,11 @@ void mainFournisseur::on_addButton_clicked() {
     if (fournisseurs.ajouter()) {
         QMessageBox::information(this, "Success", "Supplier added successfully.");
         LogViewer::writeLog("Add Supplier: Added supplier " + NOM + " " + PRENOM);
+        QSqlQueryModel *model = fournisseur.afficher();
+        ui->tableView->setModel(model);
 
         // Rafraîchir les statistiques après l'ajout
-        onStatButtonClicked();
+        //onStatButtonClicked();
     } else {
         QMessageBox::critical(this, "Error", "Failed to add supplier.");
     }
@@ -172,6 +177,8 @@ void mainFournisseur::on_modifyButton_clicked()
     if (fournisseur.modifier()) {
         QMessageBox::information(this, "Success", "Supplier modified successfully.");
         LogViewer::writeLog("Modify Supplier: Modified supplier " + NOM + " " + PRENOM);
+        QSqlQueryModel *model = fournisseur.afficher();
+        ui->tableView->setModel(model);
     } else {
         QMessageBox::critical(this, "Error", "Failed to modify supplier.");
     }
@@ -189,6 +196,8 @@ void mainFournisseur::on_supprimer_Button_2_clicked()
     if (fournisseur.supprimer(IDF)) {
         QMessageBox::information(this, "Success", "Supplier deleted successfully.");
         LogViewer::writeLog("Delete Supplier: Deleted supplier with ID: " + QString::number(IDF));
+        QSqlQueryModel *model = fournisseur.afficher();
+        ui->tableView->setModel(model);
     } else {
         QMessageBox::critical(this, "Error", "Failed to delete supplier.");
     }
@@ -279,62 +288,62 @@ void mainFournisseur::initializeCategoryComboBox() {
 }
 */
 
-void mainFournisseur::onStatButtonClicked() {
-    static QMap<QString, int> lastStats; // Stocker les dernières statistiques
+//void mainFournisseur::onStatButtonClicked() {
+//    static QMap<QString, int> lastStats; // Stocker les dernières statistiques
 
-    // Générer les statistiques actuelles
-    QMap<QString, int> currentStats;
-    QSqlQuery query;
-    QString sql = "SELECT CATEGORIE_PROD, COUNT(*) AS count FROM Fournisseurs GROUP BY CATEGORIE_PROD";
+//    // Générer les statistiques actuelles
+//    QMap<QString, int> currentStats;
+//    QSqlQuery query;
+//    QString sql = "SELECT CATEGORIE_PROD, COUNT(*) AS count FROM Fournisseurs GROUP BY CATEGORIE_PROD";
 
-    if (!query.exec(sql)) {
-        qWarning() << "Error executing query:" << query.lastError().text();
-        return;
-    }
+//    if (!query.exec(sql)) {
+//        qWarning() << "Error executing query:" << query.lastError().text();
+//        return;
+//    }
 
-    while (query.next()) {
-        QString category = query.value("CATEGORIE_PROD").toString();
-        int count = query.value("count").toInt();
-        currentStats[category] = count;
-    }
+//    while (query.next()) {
+//        QString category = query.value("CATEGORIE_PROD").toString();
+//        int count = query.value("count").toInt();
+//        currentStats[category] = count;
+//    }
 
-    if (currentStats == lastStats) {
-        // Si les statistiques n'ont pas changé, ne pas recréer le graphique
-        return;
-    }
+//    if (currentStats == lastStats) {
+//        // Si les statistiques n'ont pas changé, ne pas recréer le graphique
+//        return;
+//    }
 
-    lastStats = currentStats; // Mettre à jour les statistiques sauvegardées
+//    lastStats = currentStats; // Mettre à jour les statistiques sauvegardées
 
-    // Vérifier s'il y a déjà un layout et le supprimer correctement
-    QLayout *existingLayout = ui->frame->layout();
-    if (existingLayout) {
-        QLayoutItem *item;
-        while ((item = existingLayout->takeAt(0)) != nullptr) {
-            delete item->widget(); // Supprimer les widgets associés
-            delete item;           // Supprimer l'élément du layout
-        }
-        delete existingLayout;     // Supprimer le layout lui-même
-    }
+//    // Vérifier s'il y a déjà un layout et le supprimer correctement
+//    QLayout *existingLayout = ui->frame->layout();
+//    if (existingLayout) {
+//        QLayoutItem *item;
+//        while ((item = existingLayout->takeAt(0)) != nullptr) {
+//            delete item->widget(); // Supprimer les widgets associés
+//            delete item;           // Supprimer l'élément du layout
+//        }
+//        delete existingLayout;     // Supprimer le layout lui-même
+//    }
 
-    // Créer un graphique avec les nouvelles statistiques
-    QtCharts::QPieSeries *series = new QtCharts::QPieSeries();
-    for (auto it = currentStats.begin(); it != currentStats.end(); ++it) {
-        series->append(it.key(), it.value());
-    }
+//    // Créer un graphique avec les nouvelles statistiques
+//    QtCharts::QPieSeries *series = new QtCharts::QPieSeries();
+//    for (auto it = currentStats.begin(); it != currentStats.end(); ++it) {
+//        series->append(it.key(), it.value());
+//    }
 
-    QtCharts::QChart *chart = new QtCharts::QChart();
-    chart->addSeries(series);
-    chart->setTitle("Statistiques des fournisseurs par catégorie de produits");
-    chart->setAnimationOptions(QtCharts::QChart::SeriesAnimations);
+//    QtCharts::QChart *chart = new QtCharts::QChart();
+//    chart->addSeries(series);
+//    chart->setTitle("Statistiques des fournisseurs par catégorie de produits");
+//    chart->setAnimationOptions(QtCharts::QChart::SeriesAnimations);
 
-    QtCharts::QChartView *chartView = new QtCharts::QChartView(chart);
-    chartView->setRenderHint(QPainter::Antialiasing);
+//    QtCharts::QChartView *chartView = new QtCharts::QChartView(chart);
+//    chartView->setRenderHint(QPainter::Antialiasing);
 
-    // Ajouter le graphique à la frame avec un nouveau layout
-    QVBoxLayout *layout = new QVBoxLayout();
-    layout->addWidget(chartView);
-    ui->frame->setLayout(layout);
-}
+//    // Ajouter le graphique à la frame avec un nouveau layout
+//    QVBoxLayout *layout = new QVBoxLayout();
+//    layout->addWidget(chartView);
+//    ui->frame->setLayout(layout);
+//}
 
 
 
@@ -447,3 +456,162 @@ void mainFournisseur::on_pageLivraison_clicked()
     // Ne pas fermer mainFournisseur ici. La fenêtre reste ouverte, mais non interactive.
 
 }
+
+void mainFournisseur::on_pageArticle_clicked()
+{     this->close();
+    // Créer une nouvelle instance de l'interface GestClients
+    MainWindowArticles *articleWindow = new MainWindowArticles(this);
+
+    // Rendre la fenêtre GestClients modale (bloquante)
+    articleWindow->setWindowModality(Qt::ApplicationModal);
+
+    // Afficher la fenêtre clients
+    articleWindow->show();
+
+    // Ne pas fermer mainFournisseur ici. La fenêtre reste ouverte, mais non interactive.
+
+}
+
+void mainFournisseur::on_pushButton_stat_clicked()
+{
+    static QMap<QString, int> lastStats; // Stocker les dernières statistiques
+
+    // Générer les statistiques actuelles
+    QMap<QString, int> currentStats;
+    QSqlQuery query;
+    QString sql = "SELECT CATEGORIE_PROD, COUNT(*) AS count FROM Fournisseurs GROUP BY CATEGORIE_PROD";
+
+    if (!query.exec(sql)) {
+        qWarning() << "Error executing query:" << query.lastError().text();
+        return;
+    }
+    while (query.next()) {
+        QString category = query.value("CATEGORIE_PROD").toString();
+        int count = query.value("count").toInt();
+        currentStats[category] = count;
+    }
+
+    if (currentStats == lastStats) {
+        // Si les statistiques n'ont pas changé, ne pas recréer le graphique
+        return;
+    }
+
+    lastStats = currentStats; // Mettre à jour les statistiques sauvegardées
+    // Vérifier s'il y a déjà un layout et le supprimer correctement
+    QLayout *existingLayout = ui->frame->layout();
+    if (existingLayout) {
+        QLayoutItem *item;
+        while ((item = existingLayout->takeAt(0)) != nullptr) {
+            delete item->widget(); // Supprimer les widgets associés
+            delete item;           // Supprimer l'élément du layout
+        }
+        delete existingLayout;     // Supprimer le layout lui-même
+    }
+
+    // Créer un graphique avec les nouvelles statistiques
+    QtCharts::QPieSeries *series = new QtCharts::QPieSeries();
+    for (auto it = currentStats.begin(); it != currentStats.end(); ++it) {
+        series->append(it.key(), it.value());
+    }
+
+    QtCharts::QChart *chart = new QtCharts::QChart();
+    chart->addSeries(series);
+    chart->setTitle("Statistiques des fournisseurs par catégorie de produits");
+    chart->setAnimationOptions(QtCharts::QChart::SeriesAnimations);
+
+    QtCharts::QChartView *chartView = new QtCharts::QChartView(chart);
+    chartView->setRenderHint(QPainter::Antialiasing);
+
+    // Ajouter le graphique à la frame avec un nouveau layout
+    QVBoxLayout *layout = new QVBoxLayout();
+    layout->addWidget(chartView);
+    ui->frame->setLayout(layout);
+}
+
+//void mainFournisseur::setupChart(const QMap<QString, int> &stats){
+//    // Create a QPieSeries
+//    QPieSeries *series = new QPieSeries();
+
+//    // Populate the pie series with data
+//    for (auto it = stats.begin(); it != stats.end(); ++it) {
+//        series->append(it.key(), it.value());
+//    }
+
+//    // Optionally, highlight the largest slice
+//    QPieSlice *largestSlice = nullptr;
+//    int maxValue = 0;
+//    for (QPieSlice *slice : series->slices()) {
+//        if (slice->value() > maxValue) {
+//            maxValue = slice->value();
+//            largestSlice = slice;
+//        }
+//    }
+//    if (largestSlice) {
+//        largestSlice->setExploded(true);
+//        largestSlice->setLabelVisible(true);
+//        largestSlice->setBrush(Qt::cyan);  // Highlight color
+//    }
+
+//    // Create a chart and add the series
+//    QChart *chart = new QChart();
+//    chart->addSeries(series);
+//    chart->setTitle("Delivery Statistics by Address");
+//    chart->setAnimationOptions(QChart::AllAnimations);
+
+//    // Create a QChartView to display the chart
+//    QChartView *chartView = new QChartView(chart);
+//    chartView->setRenderHint(QPainter::Antialiasing);
+
+//    // Set the chart in the frame
+//    QVBoxLayout *layout = qobject_cast<QVBoxLayout *>(ui->frame->layout());
+//    if (!layout) {
+//        layout = new QVBoxLayout(ui->frame);
+//        ui->frame->setLayout(layout);
+//    }
+
+//    // Clear any previous content in the chart frame
+//    QLayoutItem *child;
+//    while ((child = layout->takeAt(0)) != nullptr) {
+//        delete child->widget();
+//        delete child;
+//    }
+
+//    // Add the new chart view
+//    layout->addWidget(chartView);
+//}
+
+//void mainFournisseur::on_pushButton_stat_clicked()
+//{
+//    static QMap<QString, int> lastStats; // Stocker les dernières statistiques
+
+//    // Générer les statistiques actuelles
+//    QMap<QString, int> currentStats;
+//    QSqlQuery query;
+//    QString sql = "SELECT CATEGORIE_PROD, COUNT(*) AS count FROM Fournisseurs GROUP BY CATEGORIE_PROD";
+
+//    if (!query.exec(sql)) {
+//        qWarning() << "Error executing query:" << query.lastError().text();
+//        return;
+//    }
+
+//    while (query.next()) {
+//        QString category = query.value("CATEGORIE_PROD").toString();
+//        int count = query.value("count").toInt();
+//        currentStats[category] = count;
+//    }
+
+//    // Ne pas recréer le graphique si les statistiques n'ont pas changé
+//    if (currentStats == lastStats) {
+//        return;
+//    }
+
+//    lastStats = currentStats; // Mettre à jour les statistiques sauvegardées
+
+//    // Utiliser setupChart pour configurer le graphique
+//    try {
+//        setupChart(currentStats); // Appeler la fonction générique pour configurer le graphique
+//        qDebug() << "Chart setup completed.";
+//    } catch (...) {
+//        qDebug() << "An exception occurred during chart setup.";
+//    }
+//}

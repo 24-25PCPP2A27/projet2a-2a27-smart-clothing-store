@@ -64,7 +64,7 @@ int Arduino::close_arduino()
 
          return data;
     }
- }
+}
 
 
 void Arduino::write_to_arduino( QByteArray d)

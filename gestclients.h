@@ -38,6 +38,7 @@ private slots:
     void on_ajouterCommandePoints_clicked(); // Ajouter des points via commande
     void on_pageFournisseur_clicked();
     void on_pageLivraison_clicked();
+    void on_pageArticle_clicked();
 
 private:
     Ui::GestClients *ui;

@@ -16,7 +16,7 @@
 #include <QtCharts/QPieSeries>
 #include <QtCharts/QChart>
 #include <QtCharts/QPieSlice>
-
+#include "mainwindowarticles.h"
 #include <QSqlQuery>
 #include<QDateTime>
 #include <QColor>
@@ -433,3 +433,17 @@ void GestClients::on_stats_clicked() {
 
     }
 
+    void GestClients::on_pageArticle_clicked()
+    {     this->close();
+        // Créer une nouvelle instance de l'interface GestClients
+        MainWindowArticles *articleWindow = new MainWindowArticles(this);
+
+        // Rendre la fenêtre GestClients modale (bloquante)
+        articleWindow->setWindowModality(Qt::ApplicationModal);
+
+        // Afficher la fenêtre clients
+        articleWindow->show();
+
+        // Ne pas fermer mainFournisseur ici. La fenêtre reste ouverte, mais non interactive.
+
+    }

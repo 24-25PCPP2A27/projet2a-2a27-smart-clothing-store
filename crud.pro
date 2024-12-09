@@ -42,7 +42,10 @@ SOURCES += \
     mainFournisseur.cpp \
     mainwindow.cpp \
     serialcommunication.cpp \
-    smtp.cpp
+    smtp.cpp \
+    arduinooutput.cpp \
+    article.cpp \
+    mainwindowarticles.cpp
 
 HEADERS += \
     GestClients.h \
@@ -58,15 +61,18 @@ HEADERS += \
     mainFournisseur.h \
     mainwindow.h \
     serialcommunication.h \
-    smtp.h
+    smtp.h \
+    arduinooutput.h \
+    article.h \
+    mainwindowarticles.h
 
 FORMS += \
     GestClients.ui \
     arduinodialog.ui \
     mail.ui \
     mainFournisseur.ui \
-    mainwindow.ui
-
+    mainwindow.ui \
+    mainwindowarticles.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

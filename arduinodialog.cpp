@@ -1,5 +1,74 @@
-// ArduinoDialog.cpp
 #include "arduinodialog.h"
+#include "ui_arduinodialog.h"
+#include <QMessageBox>
+
+// Constructor and destructor
+ArduinoDialog::ArduinoDialog(QWidget *parent, Arduino *arduinoInstance)
+    : QDialog(parent), ui(new Ui::ArduinoDialog), arduino(arduinoInstance) {
+    ui->setupUi(this);
+    connectToArduino(); // Connect Arduino on initialization
+    connect(arduino->getserial(), &QSerialPort::readyRead, this, &ArduinoDialog::readFromArduino);
+}
+
+ArduinoDialog::~ArduinoDialog() {
+    delete ui;
+}
+
+void ArduinoDialog::connectToArduino() {
+    int result = arduino->connect_arduino();
+    if (result == 0) {
+        qDebug() << "Arduino connected successfully!";
+        // Ensure readyRead signal is connected to the readFromArduino slot
+        connect(arduino->getserial(), &QSerialPort::readyRead, this, &ArduinoDialog::readFromArduino);
+    } else if (result == 1) {
+        qDebug() << "Failed to open the serial port!";
+        QMessageBox::critical(this, "Error", "Failed to open the serial port!");
+    } else {
+        qDebug() << "Arduino not found!";
+        QMessageBox::critical(this, "Error", "Arduino not found!");
+    }
+}
+
+
+// Implementation of readFromArduino
+void ArduinoDialog::readFromArduino() {
+    QByteArray data = arduino->read_from_arduino();
+    if (!data.isEmpty()) {
+        QString id = QString::fromUtf8(data).trimmed();
+        qDebug() << "Received ID: " << id;
+
+        // Search the database
+        searchInDatabase(id);
+    }
+}
+
+// Implementation of searchInDatabase
+void ArduinoDialog::searchInDatabase(const QString &id_a) {
+    QSqlQuery query;
+    query.prepare("SELECT IDA, QUANTITE FROM ARTICLES WHERE IDA = :id_a");
+    query.bindValue(":id_a", id_a);
+
+    if (query.exec()) {
+        QString message;
+        if (query.next()) {
+            QString quantity = query.value("QUANTITE").toString();
+            message = "ID: " + id_a + " Qty: " + quantity;
+        } else {
+            message = "ID Not Found!";
+        }
+
+        // Send the result back to Arduino
+        arduino->write_to_arduino(message.toUtf8());
+        qDebug() << "Sent to Arduino: " << message;
+    } else {
+        qDebug() << "Database query error: " << query.lastError().text();
+        arduino->write_to_arduino("Error querying DB");
+    }
+}
+
+
+
+/*#include "arduinodialog.h"
 #include "ui_arduinodialog.h"
 #include "arduino.h"
 #include <QMessageBox>
@@ -37,7 +106,7 @@ void ArduinoDialog::connectToArduino()
     } else {
         QMessageBox::critical(this, "Erreur", "Arduino non trouvé!");
     }
-}
+}*/
 
 
 
@@ -98,7 +167,7 @@ void ArduinoDialog::connectToArduino()
 
 
 
-void ArduinoDialog::readFromArduino() {
+/*void ArduinoDialog::readFromArduino() {
     QByteArray data = arduino->read_from_arduino();
     if (!data.isEmpty()) {
         QString receivedText = QString::fromUtf8(data);  // Convertit les données en texte
@@ -175,4 +244,4 @@ void ArduinoDialog::on_pushButtonDisconnect_clicked()
     } else {
         qDebug() << "Échec de la déconnexion!";
     }
-}
+}*/

@@ -39,6 +39,9 @@ private slots:
     void on_openMailButton_clicked();  // Slot for opening mail widget
     void on_pageClient_clicked();
     void on_pageLivraison_clicked();
+    void on_pageArticle_clicked();
+
+    void on_pushButton_stat_clicked();
 
 private:
     Ui::mainFournisseur *ui;  // UI object
@@ -46,6 +49,7 @@ private:
     QTableView *tableView;  // Table view for displaying suppliers
     Arduino arduino;  // Instance of Arduino class for handling hardware interactions
     mail *mailWidget;  // Pointer to mail widget for email functionalities
+    void setupChart(const QMap<QString, int> &stats);
 
 };
 

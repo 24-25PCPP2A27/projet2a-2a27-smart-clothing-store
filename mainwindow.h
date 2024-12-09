@@ -44,6 +44,7 @@ private slots:
     void on_calendarWidget_selectionChanged();  // Show livraison details on date selection
     void on_pageClient_clicked();
     void on_pageFournisseur_clicked();
+    void on_pageArticle_clicked();
 
 
 
